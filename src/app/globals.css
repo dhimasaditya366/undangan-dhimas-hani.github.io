@@ -1,26 +1,172 @@
 @import "tailwindcss";
 
+@theme {
+  --color-sage-cream: #EDF2E0;
+  --color-sage-pale: #E4EDD4;
+  --color-sage-light: #D5E8B0;
+  --color-sage-surface: #B8CB88;
+  --color-olive-base: #5A7820;
+  --color-olive-mid: #6A8828;
+  --color-olive-dark: #2C4A10;
+  --color-olive-text: #3D5A18;
+  --color-gold-warm: #C9A96E;
+  --color-gold-deep: #D4A843;
+  --color-text-light: #F5F2E8;
+  --color-text-dark: #1E3A0C;
+
+  --font-serif: var(--font-cormorant);
+  --font-sans: var(--font-jost);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-bg-light: #EDF2E0;
+  --color-bg-mid: #D5E8B0;
+  --color-bg-surface: #B8CB88;
+  --color-primary: #5A7820;
+  --color-primary-dark: #2C4A10;
+  --color-primary-mid: #6A8828;
+  --color-gold: #C9A96E;
+  --color-gold-deep: #D4A843;
+  --color-text-main: #1E3A0C;
+  --color-text-sub: #3D5A18;
+  --color-text-light: #F5F2E8;
+  --color-text-muted: rgba(245, 242, 232, 0.55);
+  --color-gold-muted: rgba(212, 168, 67, 0.65);
+  --color-gold-border: rgba(201, 169, 110, 0.35);
+  --color-gold-border-deep: rgba(212, 168, 67, 0.45);
+
+  --background: var(--color-bg-light);
+  --foreground: var(--color-text-main);
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Jost", system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.font-display { font-family: var(--font-display); }
+.font-body    { font-family: var(--font-body); }
+
+.t1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  line-height: 1.1;
+}
+.t2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+.t3 {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.t4 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+.t5 {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+}
+.t6 {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.75;
+}
+.t7 {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.t8 {
+  font-family: var(--font-body);
+  font-size: clamp(3.5rem, 10vw, 5rem);
+  font-weight: 300;
+  letter-spacing: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.t9 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.5rem;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-sage-cream);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold-warm);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-olive-text);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Baroque Clip Path Utility */
+.clip-baroque {
+  clip-path: polygon(
+    10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px),
+    calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px
+  );
+}
+
+/* Loading Screen Animations */
+@keyframes ringGlow {
+  0%, 100% { border-color: rgba(201, 169, 110, 0.4); }
+  50%       { border-color: rgba(201, 169, 110, 0.85); }
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: 1;   transform: translate(-50%, -50%) scale(1.2); }
+}
+@keyframes fadeText {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 0.7; }
+}
+
+.animate-ring-glow {
+  animation: ringGlow 3s ease-in-out infinite;
+}
+.animate-glow-pulse {
+  animation: glowPulse 3.5s ease-in-out infinite;
+}
+.animate-fade-text {
+  animation: fadeText 2.4s ease-in-out infinite;
 }
