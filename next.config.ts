@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
   
   // Catatan: Jika repository GitHub-mu bernama "undangan-dhimas",
   // kamu harus mengaktifkan baris di bawah ini dan mengganti namanya:
-  // basePath: "/undangan-dhimas",
+  basePath: "/undangan-dhimas-hani.github.io",
 };
 
 export default nextConfig;
