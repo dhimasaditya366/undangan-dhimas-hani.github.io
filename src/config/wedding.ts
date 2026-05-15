@@ -25,20 +25,20 @@ export const weddingConfig = {
   venueLng: 106.8456,                   // 📝 GANTI
 
   // ─── MEDIA ────────────────────────────────────────
-  openingVideo: "/videos/opening.mp4",
-  heroBg: "/images/hero-bg.jpeg",
-  baroqueBg: "/images/baroque-bg.jpeg",
-  backgroundMusic: "/audio/wedding-song.mp3",
+  openingVideo: "/undangan-dhimas-hani.github.io/videos/opening.mp4",
+  heroBg: "/undangan-dhimas-hani.github.io/images/hero-bg.jpeg",
+  baroqueBg: "/undangan-dhimas-hani.github.io/images/baroque-bg.jpeg",
+  backgroundMusic: "/undangan-dhimas-hani.github.io/audio/wedding-song.mp3",
 
-  groomPhoto: "/images/groom.jpeg",      // 📝 GANTI — kosongkan jika belum ada
-  bridePhoto: "/images/bride.jpeg",      // 📝 GANTI
+  groomPhoto: "/undangan-dhimas-hani.github.io/images/groom.jpeg",      // 📝 GANTI — kosongkan jika belum ada
+  bridePhoto: "/undangan-dhimas-hani.github.io/images/bride.jpeg",      // 📝 GANTI
   galleryPhotos: [                      // 📝 GANTI — tambah/kurangi sesuai jumlah foto
-    "/images/gallery-1.jpg",
-    "/images/gallery-2.jpg",
-    "/images/gallery-3.jpg",
-    "/images/gallery-4.jpg",
-    "/images/gallery-5.jpg",
-    "/images/gallery-6.jpg",
+    "/undangan-dhimas-hani.github.io/images/gallery-1.jpg",
+    "/undangan-dhimas-hani.github.io/images/gallery-2.jpg",
+    "/undangan-dhimas-hani.github.io/images/gallery-3.jpg",
+    "/undangan-dhimas-hani.github.io/images/gallery-4.jpg",
+    "/undangan-dhimas-hani.github.io/images/gallery-5.jpg",
+    "/undangan-dhimas-hani.github.io/images/gallery-6.jpg",
   ],
 
   // ─── TEKS ─────────────────────────────────────────
@@ -60,21 +60,21 @@ export const weddingConfig = {
       {
         number: "01",
         title: "Awal Mula",
-        photo: "/images/story-1.jpeg",
+        photo: "/undangan-dhimas-hani.github.io/images/story-1.jpeg",
         text: "Perkenalan kami dimulai dari hal yang sederhana — sebuah sapaan di dunia maya yang tanpa kami sadari, menjadi awal dari segalanya. Dari percakapan yang mengalir perlahan, kami mulai saling mengenal satu sama lain lebih dalam.",
         closingQuote: "",
       },
       {
         number: "02",
         title: "Perjalanan Bersama",
-        photo: "/images/story-2.jpeg",
+        photo: "/undangan-dhimas-hani.github.io/images/story-2.jpeg",
         text: "Hari demi hari, kami melewati berbagai momen — tawa yang menghangat, serta ujian yang menguatkan. Tidak selalu mudah. Ada masa-masa sulit yang mengguncang, namun justru di titik itulah kami belajar arti dari memilih satu sama lain, bukan hanya di saat senang, tetapi juga di saat paling berat sekalipun.",
         closingQuote: "",
       },
       {
         number: "03",
         title: "Sebuah Keputusan",
-        photo: "/images/story-3.jpeg",
+        photo: "/undangan-dhimas-hani.github.io/images/story-3.jpeg",
         text: "Setelah melewati semua yang telah kami jalani bersama, kami sampai pada satu keyakinan yang sama — bahwa tidak ada tempat yang lebih ingin kami tuju, selain melangkah maju bersama. Maka dengan penuh syukur dan doa, kami memilih untuk meresmikan ikatan ini dalam sebuah pernikahan.",
         closingQuote: "— dan kami pun memilih untuk terus melangkah, bersama.",
       },

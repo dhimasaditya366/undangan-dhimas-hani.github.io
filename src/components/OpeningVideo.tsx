@@ -48,7 +48,7 @@ export const OpeningVideo = () => {
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
         >
-          <source src={(process.env.NODE_ENV === 'production' ? '/undangan-dhimas-hani.github.io' : '') + weddingConfig.openingVideo} type="video/mp4" />
+          <source src={weddingConfig.openingVideo} type="video/mp4" />
         </motion.video>
 
         {/* Overlay */}

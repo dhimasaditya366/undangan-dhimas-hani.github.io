@@ -57,7 +57,7 @@ export const MusicPlayer = () => {
       {/* 📝 GANTI: ganti file di /public/audio/wedding-song.mp3 */}
       <audio 
         ref={audioRef} 
-        src={(process.env.NODE_ENV === 'production' ? '/undangan-dhimas-hani.github.io' : '') + weddingConfig.backgroundMusic} 
+        src={weddingConfig.backgroundMusic} 
         loop 
         preload="auto"
         autoPlay
