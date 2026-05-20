@@ -557,7 +557,7 @@ export default function AdminCheckinPage() {
                     <th className="px-4 py-3">ID</th>
                     <th className="px-4 py-3">Nama</th>
                     <th className="px-4 py-3">HP</th>
-                    <th className="px-4 py-3 text-center">Kirim</th>
+                    <th className="px-4 py-3 text-center">Aksi</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gold-warm/10 bg-black/10">
@@ -574,14 +574,24 @@ export default function AdminCheckinPage() {
                         <td className="px-4 py-3 align-top">{guest.name}</td>
                         <td className="px-4 py-3 align-top">{guest.phone}</td>
                         <td className="px-4 py-3 align-top text-center">
-                          <a
-                            href={createWhatsAppLink(guest)}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-block rounded-lg bg-emerald-600/20 border border-emerald-500/40 px-3 py-1 text-xs text-emerald-400 hover:bg-emerald-600/40 transition"
-                          >
-                            Kirim WA
-                          </a>
+                          <div className="flex items-center justify-center gap-2">
+                            <a
+                              href={createWhatsAppLink(guest)}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-block rounded-lg bg-emerald-600/20 border border-emerald-500/40 px-3 py-1 text-xs text-emerald-400 hover:bg-emerald-600/40 transition"
+                            >
+                              Kirim WA
+                            </a>
+                            <a
+                              href={createGuestLink(guest)}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-block rounded-lg bg-gold-warm/10 border border-gold-warm/40 px-3 py-1 text-xs text-gold-warm hover:bg-gold-warm/20 transition"
+                            >
+                              Buka Link
+                            </a>
+                          </div>
                         </td>
                       </tr>
                     ))
