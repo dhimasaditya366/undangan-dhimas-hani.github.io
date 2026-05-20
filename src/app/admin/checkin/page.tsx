@@ -53,6 +53,14 @@ export default function AdminCheckinPage() {
     setGuestList(list);
   };
 
+  const clearGuestList = () => {
+    if (window.confirm("Apakah Anda yakin ingin menghapus semua data tamu yang telah diupload? Tindakan ini tidak dapat dibatalkan.")) {
+      localStorage.removeItem(STORAGE_KEYS.guestList);
+      setGuestList([]);
+      setScanMessage("Semua data tamu telah dihapus.");
+    }
+  };
+
   const saveCheckinList = (list: CheckinEntry[]) => {
     localStorage.setItem(STORAGE_KEYS.checkinList, JSON.stringify(list));
     setCheckinList(list);
@@ -232,15 +240,20 @@ export default function AdminCheckinPage() {
           </p>
 
           <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
-            <label className="block text-text-light/70">
-              CSV Tamu (header: guestId, name, phone)
+            <div>
+              <label className="block text-text-light/70 mb-2">
+                CSV Tamu (header: guestId, name, phone)
+              </label>
               <input
                 type="file"
                 accept=".csv,text/csv"
                 onChange={handleCsvUpload}
-                className="mt-2 block w-full rounded-lg border border-gold-warm/30 bg-olive-dark/90 px-3 py-2 text-text-light"
+                className="block w-full rounded-lg border border-gold-warm/30 bg-olive-dark/90 px-3 py-2 text-text-light"
               />
-            </label>
+              <p className="mt-2 text-xs text-text-light/60">
+                Upload CSV baru akan menimpa (replace) data tamu yang sudah ada sebelumnya.
+              </p>
+            </div>
 
             <div className="rounded-2xl border border-gold-warm/20 bg-black/15 p-4">
               <div className="flex items-center justify-between gap-3">
@@ -251,7 +264,7 @@ export default function AdminCheckinPage() {
             </div>
           </div>
 
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
             <button
               type="button"
               className="rounded-full bg-gold-warm px-5 py-3 text-olive-dark transition hover:bg-gold-warm/90"
@@ -279,6 +292,13 @@ export default function AdminCheckinPage() {
               onClick={handleDownloadGuestCsv}
             >
               Download Guest List
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-red-500/50 px-5 py-3 text-red-500 transition hover:bg-red-500/10"
+              onClick={clearGuestList}
+            >
+              Hapus Semua Data Tamu
             </button>
           </div>
         </section>
