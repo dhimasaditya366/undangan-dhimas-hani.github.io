@@ -44,8 +44,14 @@ export const normalizePhoneForWhatsapp = (phone: string) => {
 
 export const encodeQuery = (value: string) => encodeURIComponent(value).replace(/%20/g, "+");
 
+const getAppBasePath = () => {
+  if (typeof window === "undefined") return "";
+  const pathSegments = window.location.pathname.split("/").slice(0, 2).join("/");
+  return pathSegments === "/" ? "" : pathSegments;
+};
+
 export const createGuestLink = (guest: GuestRow) => {
-  const base = typeof window !== "undefined" ? window.location.origin : "";
+  const base = typeof window !== "undefined" ? `${window.location.origin}${getAppBasePath()}` : "";
   const params = new URLSearchParams({
     guestId: guest.guestId,
     guestName: guest.name,
