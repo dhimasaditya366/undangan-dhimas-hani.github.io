@@ -5,6 +5,8 @@ import { useRef, useState, useEffect } from "react";
 import { Loader2, CheckCircle } from "lucide-react";
 import { BaroqueOrnament } from "./BaroqueOrnament";
 import { GoldDivider } from "./GoldDivider";
+import { QRCodeFromString } from "./QRCodeFromString";
+import { createQrPayload } from "@/lib/wedding-utils";
 
 type RsvpData = {
   name: string;
@@ -19,6 +21,12 @@ export const RSVPForm = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   
   const isInView = useInView(containerRef, { once: true, amount: 0.1 });
+  const guestId = typeof window !== "undefined"
+    ? new URLSearchParams(window.location.search).get("guestId") ?? undefined
+    : undefined;
+  const guestName = typeof window !== "undefined"
+    ? new URLSearchParams(window.location.search).get("guestName") ?? undefined
+    : undefined;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -27,6 +35,7 @@ export const RSVPForm = () => {
     guests: 1,
     message: "",
   });
+  const [qrValue, setQrValue] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [rsvpCount, setRsvpCount] = useState(0);
@@ -43,19 +52,42 @@ export const RSVPForm = () => {
     }
   }, [isSuccess]);
 
+  useEffect(() => {
+    if (guestName && !formData.name) {
+      setFormData((current) => ({ ...current, name: guestName }));
+    }
+  }, [guestName, formData.name]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     // Simulate API call
     setTimeout(() => {
-      const newEntry: RsvpData = {
+      const newEntry: RsvpData & { guestId?: string; guestName?: string } = {
         ...formData,
         date: new Date().toISOString(),
+        guestId,
+        guestName,
       };
 
+      if (formData.attendance === "Hadir") {
+        const qr = createQrPayload(
+          {
+            guestId: guestId ?? "",
+            name: guestName ?? formData.name,
+            phone: formData.phone,
+          },
+          formData.attendance,
+          formData.guests
+        );
+        setQrValue(qr);
+      } else {
+        setQrValue("");
+      }
+
       const existingStr = localStorage.getItem("wedding_rsvp");
-      let existingData: RsvpData[] = [];
+      let existingData: Array<RsvpData & { guestId?: string; guestName?: string }> = [];
       if (existingStr) {
         try {
           existingData = JSON.parse(existingStr);
@@ -240,7 +272,19 @@ export const RSVPForm = () => {
                   <CheckCircle className="mx-auto text-gold-warm mb-6" size={64} />
                 </motion.div>
                 <h3 className="font-serif text-3xl text-text-light mb-4 italic">Terima Kasih!</h3>
+                {guestName ? (
+                  <p className="font-sans text-text-light/80 mb-4">Konfirmasi hadir untuk {guestName} telah tersimpan.</p>
+                ) : null}
                 <p className="font-sans text-gold-warm mb-8">Kami menantikan kehadiran Anda di hari bahagia kami.</p>
+                {qrValue ? (
+                  <div className="rounded-3xl border border-gold-warm/20 bg-black/10 p-6 mx-auto max-w-md">
+                    <h4 className="text-lg text-gold-warm mb-3">QR Kehadiran</h4>
+                    <p className="text-text-light/80 mb-5">Tunjukkan QR ini saat check-in di pintu masuk.</p>
+                    <div className="flex justify-center">
+                      <QRCodeFromString value={qrValue} className="w-64 h-64" />
+                    </div>
+                  </div>
+                ) : null}
               </motion.div>
             )}
           </AnimatePresence>

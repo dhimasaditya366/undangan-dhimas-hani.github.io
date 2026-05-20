@@ -9,6 +9,9 @@ import { GoldDivider } from "./GoldDivider";
 export const HeroSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
+  const guestName = typeof window !== "undefined"
+    ? new URLSearchParams(window.location.search).get("guestName")
+    : null;
   const isInView = useInView(textRef, { once: false, amount: 0.3 });
 
   const { scrollYProgress } = useScroll({
@@ -85,6 +88,18 @@ export const HeroSection = () => {
           >
             The Wedding Of
           </motion.div>
+
+          {guestName ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ delay: 0.15, duration: 0.8 }}
+              className="t4 mb-3 italic"
+              style={{ color: 'rgba(245,242,232,0.85)', fontSize: '1.1rem' }}
+            >
+              Kepada Yth. {guestName}
+            </motion.div>
+          ) : null}
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
