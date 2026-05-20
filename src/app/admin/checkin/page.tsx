@@ -24,6 +24,9 @@ export default function AdminCheckinPage() {
   const [isScanning, setIsScanning] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
   const [syncStatus, setSyncStatus] = useState<"idle" | "syncing" | "ok" | "error">("idle");
+  const [blastOpen, setBlastOpen] = useState(false);
+  const [blastIndex, setBlastIndex] = useState(0);
+  const [blastSent, setBlastSent] = useState<Set<string>>(new Set());
 
   const pushToFirebase = async (partial: { guestList?: GuestRow[]; checkinList?: CheckinEntry[]; rsvpList?: any[] }) => {
     const { isRemoteEnabled, saveAllRemote } = await import("@/lib/firebase-sync");
@@ -155,12 +158,6 @@ export default function AdminCheckinPage() {
       })),
     [guestList]
   );
-
-  const handleOpenAllWhatsApp = () => {
-    guestBlastRows.forEach((row) => {
-      window.open(row.whatsappLink, "_blank", "noopener,noreferrer");
-    });
-  };
 
   const handleDownloadBlastCsv = () => {
     const csv = exportCsv(guestBlastRows, ["guestId", "name", "phone", "guestLink", "whatsappLink"]);
@@ -350,16 +347,21 @@ export default function AdminCheckinPage() {
                 <button
                   type="button"
                   className="rounded-xl bg-gold-warm px-5 py-3 text-center text-olive-dark font-medium transition hover:bg-gold-warm/90"
-                  onClick={copyBlastLinks}
+                  onClick={() => {
+                    if (guestList.length === 0) return setScanMessage("Belum ada data tamu.");
+                    setBlastIndex(0);
+                    setBlastSent(new Set());
+                    setBlastOpen(true);
+                  }}
                 >
-                  Salin Semua Link WA
+                  Kirim ke Semua Tamu
                 </button>
                 <button
                   type="button"
                   className="rounded-xl border border-gold-warm/40 px-5 py-3 text-center text-text-light transition hover:bg-white/5"
-                  onClick={handleOpenAllWhatsApp}
+                  onClick={copyBlastLinks}
                 >
-                  Buka Semua Chat WA
+                  Salin Semua Link WA
                 </button>
               </div>
             </div>
@@ -451,7 +453,7 @@ export default function AdminCheckinPage() {
                     <th className="px-4 py-3">ID</th>
                     <th className="px-4 py-3">Nama</th>
                     <th className="px-4 py-3">HP</th>
-                    <th className="px-4 py-3">Link</th>
+                    <th className="px-4 py-3 text-center">Kirim</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gold-warm/10 bg-black/10">
@@ -467,14 +469,14 @@ export default function AdminCheckinPage() {
                         <td className="px-4 py-3 align-top text-text-light/70">{guest.guestId.slice(0, 8)}</td>
                         <td className="px-4 py-3 align-top">{guest.name}</td>
                         <td className="px-4 py-3 align-top">{guest.phone}</td>
-                        <td className="px-4 py-3 align-top">
+                        <td className="px-4 py-3 align-top text-center">
                           <a
-                            href={createGuestLink(guest)}
+                            href={createWhatsAppLink(guest)}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-gold-warm underline"
+                            className="inline-block rounded-lg bg-emerald-600/20 border border-emerald-500/40 px-3 py-1 text-xs text-emerald-400 hover:bg-emerald-600/40 transition"
                           >
-                            buka
+                            Kirim WA
                           </a>
                         </td>
                       </tr>
@@ -622,6 +624,111 @@ export default function AdminCheckinPage() {
           </div>
         </section>
       </div>
+
+      {/* Blast Mode Overlay */}
+      {blastOpen && guestList.length > 0 && (() => {
+        const current = guestList[blastIndex];
+        const waLink = createWhatsAppLink(current);
+        const isLast = blastIndex >= guestList.length - 1;
+        const sentCount = blastSent.size;
+
+        const handleSend = () => {
+          window.open(waLink, "_blank", "noopener,noreferrer");
+          setBlastSent(prev => new Set(prev).add(current.guestId));
+          if (!isLast) setBlastIndex(i => i + 1);
+        };
+
+        const handleSkip = () => {
+          if (!isLast) setBlastIndex(i => i + 1);
+        };
+
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm px-4">
+            <div className="w-full max-w-sm rounded-3xl border border-gold-warm/30 bg-olive-dark shadow-2xl overflow-hidden">
+
+              {/* Progress bar */}
+              <div className="h-1 bg-white/10">
+                <div
+                  className="h-full bg-gold-warm transition-all duration-300"
+                  style={{ width: `${((blastIndex) / guestList.length) * 100}%` }}
+                />
+              </div>
+
+              <div className="p-6">
+                {/* Counter */}
+                <div className="flex items-center justify-between mb-5">
+                  <span className="text-xs text-text-light/40 uppercase tracking-widest">Kirim Undangan</span>
+                  <span className="text-sm text-gold-warm font-medium">
+                    {blastIndex + 1} / {guestList.length}
+                  </span>
+                </div>
+
+                {/* Guest info */}
+                <div className="rounded-2xl border border-gold-warm/20 bg-black/20 p-4 mb-5 text-center">
+                  <p className="text-text-light/50 text-xs mb-1">Tamu</p>
+                  <p className="text-text-light text-xl font-medium">{current.name}</p>
+                  <p className="text-text-light/40 text-sm mt-1">{current.phone}</p>
+                  {blastSent.has(current.guestId) && (
+                    <span className="mt-2 inline-block rounded-full bg-emerald-500/20 px-3 py-0.5 text-xs text-emerald-400">
+                      ✓ Sudah dikirim
+                    </span>
+                  )}
+                </div>
+
+                {/* Actions */}
+                <div className="grid grid-cols-2 gap-2 mb-3">
+                  <button
+                    type="button"
+                    onClick={handleSend}
+                    className="rounded-xl bg-emerald-600 px-4 py-3 text-white font-medium text-sm hover:bg-emerald-500 transition"
+                  >
+                    {blastSent.has(current.guestId) ? "Kirim Lagi" : "Buka Chat WA"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSkip}
+                    disabled={isLast}
+                    className="rounded-xl border border-gold-warm/30 px-4 py-3 text-text-light/70 text-sm hover:bg-white/5 transition disabled:opacity-30"
+                  >
+                    Lewati →
+                  </button>
+                </div>
+
+                {/* Nav & close */}
+                <div className="flex items-center justify-between gap-2">
+                  <button
+                    type="button"
+                    onClick={() => blastIndex > 0 && setBlastIndex(i => i - 1)}
+                    disabled={blastIndex === 0}
+                    className="text-xs text-text-light/40 hover:text-text-light/70 transition disabled:opacity-20"
+                  >
+                    ← Sebelumnya
+                  </button>
+                  <span className="text-xs text-emerald-400">{sentCount} terkirim</span>
+                  <button
+                    type="button"
+                    onClick={() => { setBlastOpen(false); setScanMessage(`Blast selesai: ${sentCount} dari ${guestList.length} tamu dikirim.`); }}
+                    className="text-xs text-text-light/40 hover:text-red-400 transition"
+                  >
+                    Tutup ✕
+                  </button>
+                </div>
+
+                {isLast && blastSent.has(current.guestId) && (
+                  <button
+                    type="button"
+                    onClick={() => { setBlastOpen(false); setScanMessage(`Blast selesai: ${sentCount} dari ${guestList.length} tamu dikirim.`); }}
+                    className="mt-3 w-full rounded-xl bg-gold-warm py-3 text-olive-dark font-medium text-sm hover:bg-gold-warm/90 transition"
+                  >
+                    Selesai 🎉
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
     </main>
   );
 }
