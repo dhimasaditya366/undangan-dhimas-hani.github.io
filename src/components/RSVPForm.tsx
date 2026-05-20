@@ -38,6 +38,8 @@ export const RSVPForm = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [rsvpCount, setRsvpCount] = useState(0);
 
+  const qrStorageKey = `wedding_qr_${guestId ?? guestName ?? ""}`;
+
   useEffect(() => {
     const saved = localStorage.getItem("wedding_rsvp");
     if (saved) {
@@ -49,6 +51,15 @@ export const RSVPForm = () => {
       }
     }
   }, [isSuccess]);
+
+  // Restore QR from localStorage on mount (persists across refresh)
+  useEffect(() => {
+    const savedQr = localStorage.getItem(qrStorageKey);
+    if (savedQr) {
+      setQrValue(savedQr);
+      setIsSuccess(true);
+    }
+  }, [qrStorageKey]);
 
   useEffect(() => {
     if (guestName && !formData.name) {
@@ -83,8 +94,10 @@ export const RSVPForm = () => {
           formData.guests
         );
         setQrValue(qr);
+        localStorage.setItem(qrStorageKey, qr);
       } else {
         setQrValue("");
+        localStorage.removeItem(qrStorageKey);
       }
 
       const existingStr = localStorage.getItem("wedding_rsvp");
@@ -286,7 +299,11 @@ export const RSVPForm = () => {
                     <h4 className="text-lg text-gold-warm mb-3">QR Kehadiran</h4>
                     <p className="text-text-light/80 mb-5">Tunjukkan QR ini saat check-in di pintu masuk.</p>
                     <div className="flex justify-center">
-                      <QRCodeFromString value={qrValue} className="w-64 h-64" />
+                      <QRCodeFromString
+                        value={qrValue}
+                        className="w-64 h-64"
+                        downloadName={guestName ?? formData.name}
+                      />
                     </div>
                   </div>
                 ) : null}
