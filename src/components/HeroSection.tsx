@@ -79,32 +79,52 @@ export const HeroSection = () => {
           style={{ y: yContent, opacity: opacityContent }}
           className="relative z-20 flex flex-col items-center text-center px-4"
         >
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ delay: 0, duration: 1 }}
-            className="t3 mb-4"
-            style={{ color: 'rgba(212,168,67,0.68)', fontSize: '1rem' }}
-          >
-            The Wedding Of
-          </motion.div>
-
           {guestName ? (
+            <>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ delay: 0, duration: 0.8 }}
+                className="t5"
+                style={{ color: 'rgba(212,168,67,0.7)', fontSize: '0.95rem', letterSpacing: '1px' }}
+              >
+                Untuk
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ delay: 0.1, duration: 0.8 }}
+                className="t2 mb-2"
+                style={{ color: '#F5F2E8', fontSize: 'clamp(1.8rem, 6vw, 3rem)' }}
+              >
+                {guestName}
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
+                className="t5 mb-6"
+                style={{ color: 'rgba(212,168,67,0.7)', fontSize: '0.9rem', fontStyle: 'italic' }}
+              >
+                Anda diundang dalam pernikahan
+              </motion.div>
+            </>
+          ) : (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ delay: 0.15, duration: 0.8 }}
-              className="t4 mb-3 italic"
-              style={{ color: 'rgba(245,242,232,0.85)', fontSize: '1.1rem' }}
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ delay: 0, duration: 1 }}
+              className="t3 mb-4"
+              style={{ color: 'rgba(212,168,67,0.68)', fontSize: '1rem' }}
             >
-              Kepada Yth. {guestName}
+              The Wedding Of
             </motion.div>
-          ) : null}
+          )}
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-            transition={{ delay: 0.2, duration: 1 }}
+            transition={{ delay: guestName ? 0.3 : 0.2, duration: 1 }}
             className="t2"
             style={{ color: '#F5F2E8', fontSize: 'clamp(2.4rem, 7vw, 4rem)' }}
           >
@@ -114,7 +134,7 @@ export const HeroSection = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ delay: 0.4, duration: 1 }}
+            transition={{ delay: guestName ? 0.45 : 0.4, duration: 1 }}
             className="font-display italic"
             style={{ color: 'rgba(212,168,67,0.6)', margin: '4px 0', fontSize: '1.4rem' }}
           >
@@ -124,7 +144,7 @@ export const HeroSection = () => {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-            transition={{ delay: 0.6, duration: 1 }}
+            transition={{ delay: guestName ? 0.6 : 0.6, duration: 1 }}
             className="t2"
             style={{ color: '#F5F2E8', fontSize: 'clamp(2.4rem, 7vw, 4rem)' }}
           >
@@ -134,7 +154,7 @@ export const HeroSection = () => {
           <motion.div
             initial={{ scaleX: 0 }}
             animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-            transition={{ delay: 0.8, duration: 1 }}
+            transition={{ delay: guestName ? 0.75 : 0.8, duration: 1 }}
           >
             <GoldDivider variant="ornate" theme="dark" />
           </motion.div>
@@ -142,7 +162,7 @@ export const HeroSection = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ delay: 1, duration: 1 }}
+            transition={{ delay: guestName ? 0.9 : 1, duration: 1 }}
             className="t4"
             style={{ color: 'rgba(245,242,232,0.85)', letterSpacing: '3px', fontSize: '1.3rem' }}
           >
