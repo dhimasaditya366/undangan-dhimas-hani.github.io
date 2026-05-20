@@ -8,11 +8,13 @@ import {
   createGuestId,
   createGuestLink,
   createWhatsAppLink,
+  normalizePhoneForWhatsapp,
   decodeQrPayload,
   exportCsv,
   parseGuestCsv,
   CheckinEntry,
 } from "@/lib/wedding-utils";
+import { weddingConfig } from "@/config/wedding";
 
 const isBarcodeDetectorSupported = typeof window !== "undefined" && "BarcodeDetector" in window;
 
@@ -27,6 +29,11 @@ export default function AdminCheckinPage() {
   const [blastOpen, setBlastOpen] = useState(false);
   const [blastIndex, setBlastIndex] = useState(0);
   const [blastSent, setBlastSent] = useState<Set<string>>(new Set());
+
+  const [fonnteToken, setFonnteToken] = useState("");
+  const [fonnteTemplate, setFonnteTemplate] = useState("");
+  const [fonnteSending, setFonnteSending] = useState(false);
+  const [fonnteProgress, setFonnteProgress] = useState({ current: 0, total: 0, errors: 0 });
 
   const pushToFirebase = async (partial: { guestList?: GuestRow[]; checkinList?: CheckinEntry[]; rsvpList?: any[] }) => {
     const { isRemoteEnabled, saveAllRemote } = await import("@/lib/firebase-sync");
@@ -46,9 +53,51 @@ export default function AdminCheckinPage() {
   const streamRef = useRef<MediaStream | null>(null);
   const detectorRef = useRef<any>(null);
 
+  const DEFAULT_TEMPLATE = `Halo {nama},\n\nKamu diundang ke pernikahan ${weddingConfig.brideName} & ${weddingConfig.groomName} 🎊\n\nBuka undangan personalmu di sini:\n{link}\n\nMohon konfirmasi kehadiranmu melalui link tersebut ya.\nSampai jumpa di hari bahagia kami! 😊`;
+
+  const sendViaFonnte = async () => {
+    if (!fonnteToken.trim()) return setScanMessage("Masukkan token Fonnte terlebih dahulu.");
+    if (guestList.length === 0) return setScanMessage("Belum ada data tamu.");
+    setFonnteSending(true);
+    setFonnteProgress({ current: 0, total: guestList.length, errors: 0 });
+    let errors = 0;
+    const template = fonnteTemplate.trim() || DEFAULT_TEMPLATE;
+    for (let i = 0; i < guestList.length; i++) {
+      const guest = guestList[i];
+      const link = createGuestLink(guest);
+      const message = template
+        .replace(/\{nama\}/gi, guest.name)
+        .replace(/\{link\}/gi, link)
+        .replace(/\{phone\}/gi, guest.phone);
+      try {
+        const res = await fetch("https://api.fonnte.com/send", {
+          method: "POST",
+          headers: { Authorization: fonnteToken.trim() },
+          body: new URLSearchParams({
+            target: normalizePhoneForWhatsapp(guest.phone),
+            message,
+            delay: "2",
+          }),
+        });
+        const json = await res.json();
+        if (!json.status) errors++;
+      } catch {
+        errors++;
+      }
+      setFonnteProgress({ current: i + 1, total: guestList.length, errors });
+      if (i < guestList.length - 1) await new Promise(r => setTimeout(r, 1200));
+    }
+    setFonnteSending(false);
+    setScanMessage(`Fonnte selesai: ${guestList.length - errors} berhasil, ${errors} gagal.`);
+  };
+
   useEffect(() => {
     const savedGuest = localStorage.getItem(STORAGE_KEYS.guestList);
     const savedCheckin = localStorage.getItem(STORAGE_KEYS.checkinList);
+    const savedToken = localStorage.getItem("fonnte_token");
+    const savedTpl = localStorage.getItem("fonnte_template");
+    if (savedToken) setFonnteToken(savedToken);
+    if (savedTpl) setFonnteTemplate(savedTpl);
     if (savedGuest) {
       try {
         setGuestList(JSON.parse(savedGuest) as GuestRow[]);
@@ -384,6 +433,61 @@ export default function AdminCheckinPage() {
                 >
                   Unduh Link WA Blast (.csv)
                 </button>
+              </div>
+            </div>
+
+            {/* Grup: Fonnte WA Blast */}
+            <div className="rounded-2xl border border-emerald-500/20 bg-black/10 p-4">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-emerald-400/70">Kirim Massal via Fonnte</p>
+              <p className="mb-3 text-xs text-text-light/40">Pesan otomatis dikirim ke semua tamu sekaligus lewat WhatsApp-mu</p>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs text-text-light/50 mb-1">Token Fonnte <span className="text-text-light/30">(dari dashboard Fonnte → Device → Token)</span></label>
+                  <input
+                    type="password"
+                    value={fonnteToken}
+                    onChange={e => { setFonnteToken(e.target.value); localStorage.setItem("fonnte_token", e.target.value); }}
+                    placeholder="Paste token Fonnte kamu di sini..."
+                    className="w-full rounded-lg border border-emerald-500/20 bg-olive-dark/80 px-3 py-2 text-sm text-text-light placeholder:text-text-light/20 focus:outline-none focus:border-emerald-500/50"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-text-light/50 mb-1">
+                    Template pesan <span className="text-text-light/30">— gunakan {"{nama}"} dan {"{link}"}</span>
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={fonnteTemplate || DEFAULT_TEMPLATE}
+                    onChange={e => { setFonnteTemplate(e.target.value); localStorage.setItem("fonnte_template", e.target.value); }}
+                    className="w-full rounded-lg border border-emerald-500/20 bg-olive-dark/80 px-3 py-2 text-sm text-text-light placeholder:text-text-light/20 focus:outline-none focus:border-emerald-500/50 resize-none"
+                  />
+                </div>
+                {fonnteSending ? (
+                  <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm text-emerald-300 animate-pulse">Mengirim...</span>
+                      <span className="text-sm text-emerald-400 font-medium">{fonnteProgress.current}/{fonnteProgress.total}</span>
+                    </div>
+                    <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+                      <div
+                        className="h-full bg-emerald-500 transition-all duration-300 rounded-full"
+                        style={{ width: `${(fonnteProgress.current / fonnteProgress.total) * 100}%` }}
+                      />
+                    </div>
+                    {fonnteProgress.errors > 0 && (
+                      <p className="mt-1 text-xs text-red-400">{fonnteProgress.errors} gagal terkirim</p>
+                    )}
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    disabled={!fonnteToken.trim() || guestList.length === 0}
+                    onClick={sendViaFonnte}
+                    className="w-full rounded-xl bg-emerald-600 px-5 py-3 text-white font-medium text-sm hover:bg-emerald-500 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    Kirim ke Semua {guestList.length > 0 ? `(${guestList.length} tamu)` : ""} via Fonnte
+                  </button>
+                )}
               </div>
             </div>
 
