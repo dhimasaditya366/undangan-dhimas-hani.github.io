@@ -21,12 +21,10 @@ export const RSVPForm = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   
   const isInView = useInView(containerRef, { once: true, amount: 0.1 });
-  const guestId = typeof window !== "undefined"
-    ? new URLSearchParams(window.location.search).get("guestId") ?? undefined
-    : undefined;
-  const guestName = typeof window !== "undefined"
-    ? new URLSearchParams(window.location.search).get("guestName") ?? undefined
-    : undefined;
+  const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+  const guestId = searchParams?.get("guestId") ?? undefined;
+  const guestName = searchParams?.get("guestName") ?? undefined;
+  const guestPhone = searchParams?.get("phone") ?? undefined;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -56,7 +54,10 @@ export const RSVPForm = () => {
     if (guestName && !formData.name) {
       setFormData((current) => ({ ...current, name: guestName }));
     }
-  }, [guestName, formData.name]);
+    if (guestPhone && !formData.phone) {
+      setFormData((current) => ({ ...current, phone: guestPhone }));
+    }
+  }, [guestName, guestPhone, formData.name, formData.phone]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -149,8 +150,12 @@ export const RSVPForm = () => {
                       onChange={e => setFormData({...formData, name: e.target.value})}
                       className="t5 w-full bg-transparent border-b text-text-light py-2 focus:outline-none focus:border-gold-warm transition-colors placeholder:text-text-light/20"
                       style={{ borderColor: 'rgba(212,168,67,0.3)' }}
-                      placeholder="Tulis nama Anda"
+                      placeholder={guestName ? "Nama diundangan" : "Tulis nama Anda"}
+                      readOnly={Boolean(guestName)}
                     />
+                    {guestName ? (
+                      <p className="mt-2 text-sm text-gold-warm/80">Nama tamu sudah otomatis terisi dari undangan.</p>
+                    ) : null}
                   </motion.div>
 
                   {/* WA */}

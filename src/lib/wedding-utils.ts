@@ -49,6 +49,7 @@ export const createGuestLink = (guest: GuestRow) => {
   const params = new URLSearchParams({
     guestId: guest.guestId,
     guestName: guest.name,
+    phone: guest.phone,
   });
   return `${base}/?${params.toString()}`;
 };
