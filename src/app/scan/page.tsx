@@ -107,7 +107,7 @@ export default function ScanPage() {
     const start = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" },
+          video: { facingMode: "user" },
         });
         if (stopped) { stream.getTracks().forEach((t) => t.stop()); return; }
         streamRef.current = stream;
