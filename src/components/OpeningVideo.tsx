@@ -61,7 +61,7 @@ export const OpeningVideo = () => {
         {/* Content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
           <div className="font-display italic drop-shadow-lg" style={{ color: '#F5F2E8', fontSize: 'clamp(4.5rem, 16vw, 8rem)' }}>
-            {weddingConfig.groomInitial} <span style={{ color: 'rgba(212,168,67,0.6)', fontSize: '60%' }}>&</span> {weddingConfig.brideInitial}
+            {weddingConfig.brideInitial} <span style={{ color: 'rgba(212,168,67,0.6)', fontSize: '60%' }}>&</span> {weddingConfig.groomInitial}
           </div>
           <button
             onClick={handleOpen}
