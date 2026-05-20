@@ -28,16 +28,16 @@ export const CoupleSection = () => {
         </motion.div>
 
         <div className="flex flex-col md:flex-row items-center justify-center gap-12 lg:gap-24">
-          {/* Groom */}
+          {/* Bride */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex flex-col items-center text-center max-w-xs"
           >
-            <PhotoPlaceholder initial={weddingConfig.groomInitial} size="lg" className="mb-8" />
-            <h3 className="t2 text-text-main mb-2">{weddingConfig.groomFullName}</h3>
-            <p className="t5 text-olive-text mb-4">{weddingConfig.groomParents}</p>
+            <PhotoPlaceholder initial={weddingConfig.brideInitial} size="lg" className="mb-8" />
+            <h3 className="t2 text-text-main mb-2">{weddingConfig.brideFullName}</h3>
+            <p className="t5 text-olive-text mb-4">{weddingConfig.brideParents}</p>
             <div className="flex gap-4 mt-2">
               <a href="#" className="w-8 h-8 rounded-full border border-gold-warm/50 flex items-center justify-center text-gold-warm hover:bg-gold-warm hover:text-sage-cream transition-colors">
                  <span className="sr-only">Instagram</span>
@@ -58,16 +58,16 @@ export const CoupleSection = () => {
             </svg>
           </motion.div>
 
-          {/* Bride */}
+          {/* Groom */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex flex-col items-center text-center max-w-xs"
           >
-            <PhotoPlaceholder initial={weddingConfig.brideInitial} size="lg" className="mb-8" />
-            <h3 className="t2 text-text-main mb-2">{weddingConfig.brideFullName}</h3>
-            <p className="t5 text-olive-text mb-4">{weddingConfig.brideParents}</p>
+            <PhotoPlaceholder initial={weddingConfig.groomInitial} size="lg" className="mb-8" />
+            <h3 className="t2 text-text-main mb-2">{weddingConfig.groomFullName}</h3>
+            <p className="t5 text-olive-text mb-4">{weddingConfig.groomParents}</p>
             <div className="flex gap-4 mt-2">
               <a href="#" className="w-8 h-8 rounded-full border border-gold-warm/50 flex items-center justify-center text-gold-warm hover:bg-gold-warm hover:text-sage-cream transition-colors">
                  <span className="sr-only">Instagram</span>

@@ -149,7 +149,7 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
                   letterSpacing: '4px'
                 }}
               >
-                {weddingConfig.groomInitial} <span style={{fontSize: '28px', opacity: 0.7}}>&</span> {weddingConfig.brideInitial}
+                {weddingConfig.brideInitial} <span style={{fontSize: '28px', opacity: 0.7}}>&</span> {weddingConfig.groomInitial}
               </span>
             </div>
 

@@ -25,7 +25,7 @@ export const Footer = () => {
           transition={{ duration: 0.8 }}
         >
           <div className="t2 text-gold-warm mb-6" style={{ fontSize: 'clamp(2rem, 7vw, 3rem)' }}>
-            {weddingConfig.groomInitial} <span className="t9 mx-2">&</span> {weddingConfig.brideInitial}
+            {weddingConfig.brideInitial} <span className="t9 mx-2">&</span> {weddingConfig.groomInitial}
           </div>
           
           <div className="w-16 h-[1px] mx-auto mb-6" style={{ backgroundColor: 'rgba(212,168,67,0.4)' }} />

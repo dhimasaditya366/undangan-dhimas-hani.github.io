@@ -128,7 +128,7 @@ export const HeroSection = () => {
             className="t2"
             style={{ color: '#F5F2E8', fontSize: 'clamp(2.4rem, 7vw, 4rem)' }}
           >
-            {weddingConfig.groomName}
+            {weddingConfig.brideName}
           </motion.div>
 
           <motion.div
@@ -148,7 +148,7 @@ export const HeroSection = () => {
             className="t2"
             style={{ color: '#F5F2E8', fontSize: 'clamp(2.4rem, 7vw, 4rem)' }}
           >
-            {weddingConfig.brideName}
+            {weddingConfig.groomName}
           </motion.div>
 
           <motion.div
