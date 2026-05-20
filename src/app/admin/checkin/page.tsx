@@ -25,13 +25,15 @@ export default function AdminCheckinPage() {
   const [cameraActive, setCameraActive] = useState(false);
   const [syncStatus, setSyncStatus] = useState<"idle" | "syncing" | "ok" | "error">("idle");
 
-  const pushToFirebase = async (partial: { guestList?: GuestRow[]; checkinList?: CheckinEntry[] }) => {
+  const pushToFirebase = async (partial: { guestList?: GuestRow[]; checkinList?: CheckinEntry[]; rsvpList?: any[] }) => {
     const { isRemoteEnabled, saveAllRemote } = await import("@/lib/firebase-sync");
     if (!isRemoteEnabled()) return;
     setSyncStatus("syncing");
     try {
-      const rsvpList = JSON.parse(localStorage.getItem("wedding_rsvp") || "[]");
-      await saveAllRemote({ ...partial, rsvpList });
+      const rsvpList = partial.rsvpList ?? JSON.parse(localStorage.getItem("wedding_rsvp") || "[]");
+      const guestList = partial.guestList ?? JSON.parse(localStorage.getItem(STORAGE_KEYS.guestList) || "[]");
+      const checkinList = partial.checkinList ?? JSON.parse(localStorage.getItem(STORAGE_KEYS.checkinList) || "[]");
+      await saveAllRemote({ guestList, checkinList, rsvpList });
       setSyncStatus("ok");
     } catch {
       setSyncStatus("error");
@@ -94,6 +96,7 @@ export default function AdminCheckinPage() {
       localStorage.removeItem(STORAGE_KEYS.guestList);
       setGuestList([]);
       setScanMessage("Semua data tamu telah dihapus.");
+      pushToFirebase({ guestList: [] });
     }
   };
 
@@ -102,6 +105,7 @@ export default function AdminCheckinPage() {
       localStorage.removeItem("wedding_rsvp");
       window.dispatchEvent(new Event("rsvp_updated"));
       setScanMessage("Semua data RSVP, ucapan, dan doa telah dihapus.");
+      pushToFirebase({ rsvpList: [] });
     }
   };
 
@@ -116,6 +120,7 @@ export default function AdminCheckinPage() {
       localStorage.removeItem(STORAGE_KEYS.checkinList);
       setCheckinList([]);
       setScanMessage("Semua data check-in telah dihapus.");
+      pushToFirebase({ checkinList: [] });
     }
   };
 
@@ -380,57 +385,34 @@ export default function AdminCheckinPage() {
               </div>
             </div>
 
-            {/* Grup: Sinkronisasi */}
-            <div className="rounded-2xl border border-blue-500/20 bg-black/10 p-4">
-              <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-blue-400/60">Sinkronisasi Antar Perangkat</p>
-              <p className="mb-3 text-xs text-text-light/40">Kirim data ke cloud agar bisa diakses di HP/laptop lain</p>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                <button
-                  type="button"
-                  className="rounded-xl border border-blue-500/40 px-5 py-3 text-center text-blue-400 transition hover:bg-blue-500/10"
-                  onClick={async () => {
-                    const { isRemoteEnabled, saveAllRemote } = await import("@/lib/firebase-sync");
-                    if (!isRemoteEnabled()) return setScanMessage("Firebase belum dikonfigurasi.");
-                    setSyncStatus("syncing");
-                    try {
-                      await saveAllRemote({ guestList, checkinList, rsvpList: JSON.parse(localStorage.getItem("wedding_rsvp") || "[]") });
-                      setSyncStatus("ok");
-                      setScanMessage("Data berhasil dikirim ke cloud.");
-                    } catch {
-                      setSyncStatus("error");
-                      setScanMessage("Gagal kirim ke cloud. Cek koneksi internet.");
-                    }
-                  }}
-                >
-                  ↑ Kirim ke Cloud
-                </button>
-                <button
-                  type="button"
-                  className="rounded-xl border border-blue-500/40 px-5 py-3 text-center text-blue-400 transition hover:bg-blue-500/10"
-                  onClick={async () => {
-                    const { isRemoteEnabled, loadAllRemote } = await import("@/lib/firebase-sync");
-                    if (!isRemoteEnabled()) return setScanMessage("Firebase belum dikonfigurasi.");
-                    setSyncStatus("syncing");
-                    try {
-                      const data = await loadAllRemote();
-                      if (data) {
-                        if (data.guestList) { localStorage.setItem(STORAGE_KEYS.guestList, JSON.stringify(data.guestList)); setGuestList(data.guestList); }
-                        if (data.checkinList) { localStorage.setItem(STORAGE_KEYS.checkinList, JSON.stringify(data.checkinList)); setCheckinList(data.checkinList); }
-                        if (data.rsvpList) { localStorage.setItem("wedding_rsvp", JSON.stringify(data.rsvpList)); window.dispatchEvent(new Event("rsvp_updated")); }
-                        setSyncStatus("ok");
-                        setScanMessage("Data berhasil diambil dari cloud.");
-                      } else {
-                        setSyncStatus("idle");
-                        setScanMessage("Belum ada data di cloud.");
-                      }
-                    } catch {
-                      setSyncStatus("error");
-                      setScanMessage("Gagal ambil dari cloud. Cek koneksi internet.");
-                    }
-                  }}
-                >
-                  ↓ Ambil dari Cloud
-                </button>
+            {/* Status sinkronisasi otomatis */}
+            <div className={`rounded-2xl border p-4 flex items-center gap-3 ${
+              syncStatus === "ok"      ? "border-emerald-500/30 bg-emerald-500/5" :
+              syncStatus === "syncing" ? "border-blue-500/30 bg-blue-500/5" :
+              syncStatus === "error"   ? "border-red-500/30 bg-red-500/5" :
+              "border-white/10 bg-black/10"
+            }`}>
+              <span className={`text-xl ${
+                syncStatus === "ok"      ? "text-emerald-400" :
+                syncStatus === "syncing" ? "text-blue-400 animate-pulse" :
+                syncStatus === "error"   ? "text-red-400" :
+                "text-white/20"
+              }`}>
+                {syncStatus === "ok" ? "●" : syncStatus === "syncing" ? "●" : syncStatus === "error" ? "●" : "●"}
+              </span>
+              <div>
+                <p className={`text-sm font-medium ${
+                  syncStatus === "ok"      ? "text-emerald-300" :
+                  syncStatus === "syncing" ? "text-blue-300" :
+                  syncStatus === "error"   ? "text-red-300" :
+                  "text-white/30"
+                }`}>
+                  {syncStatus === "ok"      ? "Tersinkron ke cloud" :
+                   syncStatus === "syncing" ? "Menyinkron..." :
+                   syncStatus === "error"   ? "Gagal sinkron — cek koneksi" :
+                   "Sinkronisasi otomatis aktif"}
+                </p>
+                <p className="text-xs text-white/30 mt-0.5">Semua perubahan otomatis tersimpan ke cloud</p>
               </div>
             </div>
 
