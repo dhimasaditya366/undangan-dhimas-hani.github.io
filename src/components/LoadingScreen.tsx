@@ -35,7 +35,7 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
           {/* 📝 GANTI: ganti /public/images/Loading-Screen.jpeg dengan gambar kamu jika berbeda */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="/images/Loading-Screen.jpeg"
+              src="/undangan-dhimas-hani.github.io/images/Loading-Screen.jpeg"
               alt="Loading Background"
               fill
               className="object-cover"
