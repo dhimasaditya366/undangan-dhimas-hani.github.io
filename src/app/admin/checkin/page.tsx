@@ -23,6 +23,20 @@ export default function AdminCheckinPage() {
   const [scannedPayload, setScannedPayload] = useState<any>(null);
   const [isScanning, setIsScanning] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
+  const [syncStatus, setSyncStatus] = useState<"idle" | "syncing" | "ok" | "error">("idle");
+
+  const pushToFirebase = async (partial: { guestList?: GuestRow[]; checkinList?: CheckinEntry[] }) => {
+    const { isRemoteEnabled, saveAllRemote } = await import("@/lib/firebase-sync");
+    if (!isRemoteEnabled()) return;
+    setSyncStatus("syncing");
+    try {
+      const rsvpList = JSON.parse(localStorage.getItem("wedding_rsvp") || "[]");
+      await saveAllRemote({ ...partial, rsvpList });
+      setSyncStatus("ok");
+    } catch {
+      setSyncStatus("error");
+    }
+  };
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const detectorRef = useRef<any>(null);
@@ -32,25 +46,47 @@ export default function AdminCheckinPage() {
     const savedCheckin = localStorage.getItem(STORAGE_KEYS.checkinList);
     if (savedGuest) {
       try {
-        const parsed = JSON.parse(savedGuest) as GuestRow[];
-        setGuestList(parsed);
+        setGuestList(JSON.parse(savedGuest) as GuestRow[]);
       } catch {
         setGuestList([]);
       }
     }
     if (savedCheckin) {
       try {
-        const parsed = JSON.parse(savedCheckin) as CheckinEntry[];
-        setCheckinList(parsed);
+        setCheckinList(JSON.parse(savedCheckin) as CheckinEntry[]);
       } catch {
         setCheckinList([]);
       }
     }
+
+    // Mulai real-time listener Firestore jika Firebase dikonfigurasi
+    let cleanup: (() => void) | undefined;
+    import("@/lib/firebase-sync").then(({ isRemoteEnabled, startListening, stopListening }) => {
+      if (!isRemoteEnabled()) return;
+      startListening((data) => {
+        if (data.guestList) {
+          localStorage.setItem(STORAGE_KEYS.guestList, JSON.stringify(data.guestList));
+          setGuestList(data.guestList);
+        }
+        if (data.checkinList) {
+          localStorage.setItem(STORAGE_KEYS.checkinList, JSON.stringify(data.checkinList));
+          setCheckinList(data.checkinList);
+        }
+        if (data.rsvpList) {
+          localStorage.setItem("wedding_rsvp", JSON.stringify(data.rsvpList));
+          window.dispatchEvent(new Event("rsvp_updated"));
+        }
+      });
+      cleanup = stopListening;
+    });
+
+    return () => cleanup?.();
   }, []);
 
   const saveGuestList = (list: GuestRow[]) => {
     localStorage.setItem(STORAGE_KEYS.guestList, JSON.stringify(list));
     setGuestList(list);
+    pushToFirebase({ guestList: list });
   };
 
   const clearGuestList = () => {
@@ -86,6 +122,7 @@ export default function AdminCheckinPage() {
   const saveCheckinList = (list: CheckinEntry[]) => {
     localStorage.setItem(STORAGE_KEYS.checkinList, JSON.stringify(list));
     setCheckinList(list);
+    pushToFirebase({ checkinList: list });
   };
 
   const handleCsvUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -278,9 +315,22 @@ export default function AdminCheckinPage() {
             </div>
 
             <div className="rounded-2xl border border-gold-warm/20 bg-black/15 p-4">
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center justify-between gap-3 flex-wrap">
                 <span className="t5 text-text-light/80">Status Import</span>
-                <span className="rounded-full bg-gold-warm/20 px-3 py-1 text-[0.85rem] text-gold-warm">{guestList.length} tamu</span>
+                <div className="flex gap-2">
+                  <span className="rounded-full bg-gold-warm/20 px-3 py-1 text-[0.85rem] text-gold-warm">{guestList.length} tamu</span>
+                  <span className={`rounded-full px-3 py-1 text-[0.85rem] ${
+                    syncStatus === "ok" ? "bg-emerald-500/20 text-emerald-400" :
+                    syncStatus === "syncing" ? "bg-blue-500/20 text-blue-400" :
+                    syncStatus === "error" ? "bg-red-500/20 text-red-400" :
+                    "bg-white/10 text-text-light/40"
+                  }`}>
+                    {syncStatus === "ok" ? "● Tersinkron" :
+                     syncStatus === "syncing" ? "● Menyinkron..." :
+                     syncStatus === "error" ? "● Gagal sinkron" :
+                     "● Lokal"}
+                  </span>
+                </div>
               </div>
               <p className="mt-3 text-sm text-text-light/70">{scanMessage}</p>
             </div>
@@ -321,6 +371,52 @@ export default function AdminCheckinPage() {
               onClick={clearGuestList}
             >
               Hapus Semua Data Tamu
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-blue-500/50 px-5 py-3 text-blue-400 transition hover:bg-blue-500/10"
+              onClick={async () => {
+                const { isRemoteEnabled, saveAllRemote } = await import("@/lib/firebase-sync");
+                if (!isRemoteEnabled()) return setScanMessage("Firebase belum dikonfigurasi. Isi .env.local terlebih dahulu.");
+                setSyncStatus("syncing");
+                try {
+                  await saveAllRemote({ guestList, checkinList, rsvpList: JSON.parse(localStorage.getItem("wedding_rsvp") || "[]") });
+                  setSyncStatus("ok");
+                  setScanMessage("Push ke Firebase berhasil.");
+                } catch {
+                  setSyncStatus("error");
+                  setScanMessage("Push gagal. Cek konfigurasi Firebase.");
+                }
+              }}
+            >
+              Push ke Remote
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-blue-500/50 px-5 py-3 text-blue-400 transition hover:bg-blue-500/10"
+              onClick={async () => {
+                const { isRemoteEnabled, loadAllRemote } = await import("@/lib/firebase-sync");
+                if (!isRemoteEnabled()) return setScanMessage("Firebase belum dikonfigurasi. Isi .env.local terlebih dahulu.");
+                setSyncStatus("syncing");
+                try {
+                  const data = await loadAllRemote();
+                  if (data) {
+                    if (data.guestList) { localStorage.setItem(STORAGE_KEYS.guestList, JSON.stringify(data.guestList)); setGuestList(data.guestList); }
+                    if (data.checkinList) { localStorage.setItem(STORAGE_KEYS.checkinList, JSON.stringify(data.checkinList)); setCheckinList(data.checkinList); }
+                    if (data.rsvpList) { localStorage.setItem("wedding_rsvp", JSON.stringify(data.rsvpList)); window.dispatchEvent(new Event("rsvp_updated")); }
+                    setSyncStatus("ok");
+                    setScanMessage("Pull dari Firebase berhasil.");
+                  } else {
+                    setSyncStatus("idle");
+                    setScanMessage("Tidak ada data di Firebase.");
+                  }
+                } catch {
+                  setSyncStatus("error");
+                  setScanMessage("Pull gagal. Cek konfigurasi Firebase.");
+                }
+              }}
+            >
+              Pull dari Remote
             </button>
             <button
               type="button"
