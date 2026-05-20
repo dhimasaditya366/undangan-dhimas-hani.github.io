@@ -61,6 +61,20 @@ export default function AdminCheckinPage() {
     }
   };
 
+  const deleteCheckinEntry = (guestId: string) => {
+    const updated = checkinList.filter((entry) => entry.guestId !== guestId);
+    saveCheckinList(updated);
+    setScanMessage(`Satu data check-in telah dihapus.`);
+  };
+
+  const clearAllCheckinData = () => {
+    if (window.confirm("Apakah Anda yakin ingin menghapus SEMUA data kehadiran/check-in? Tindakan ini tidak dapat dibatalkan.")) {
+      localStorage.removeItem(STORAGE_KEYS.checkinList);
+      setCheckinList([]);
+      setScanMessage("Semua data check-in telah dihapus.");
+    }
+  };
+
   const saveCheckinList = (list: CheckinEntry[]) => {
     localStorage.setItem(STORAGE_KEYS.checkinList, JSON.stringify(list));
     setCheckinList(list);
@@ -422,13 +436,22 @@ export default function AdminCheckinPage() {
         <section className="rounded-3xl border border-gold-warm/20 bg-black/10 p-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <h2 className="t3 text-gold-warm">Daftar Check-in</h2>
-            <button
-              type="button"
-              className="rounded-full border border-gold-warm/50 px-5 py-3 text-text-light transition hover:bg-white/5"
-              onClick={handleDownloadCheckinCsv}
-            >
-              Export Check-in CSV
-            </button>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <button
+                type="button"
+                className="rounded-full border border-gold-warm/50 px-5 py-3 text-text-light transition hover:bg-white/5"
+                onClick={handleDownloadCheckinCsv}
+              >
+                Export Check-in CSV
+              </button>
+              <button
+                type="button"
+                className="rounded-full border border-red-500/50 px-5 py-3 text-red-500 transition hover:bg-red-500/10"
+                onClick={clearAllCheckinData}
+              >
+                Reset Semua Kehadiran
+              </button>
+            </div>
           </div>
           <div className="mt-6 overflow-x-auto rounded-3xl border border-gold-warm/10 bg-olive-dark/80">
             <table className="min-w-full divide-y divide-gold-warm/15 text-sm text-text-light">
@@ -439,6 +462,7 @@ export default function AdminCheckinPage() {
                   <th className="px-4 py-3">Kehadiran</th>
                   <th className="px-4 py-3">Tamu</th>
                   <th className="px-4 py-3">Waktu</th>
+                  <th className="px-4 py-3 text-center">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gold-warm/10 bg-black/10">
@@ -456,6 +480,16 @@ export default function AdminCheckinPage() {
                       <td className="px-4 py-3">{entry.attendance}</td>
                       <td className="px-4 py-3">{entry.guests}</td>
                       <td className="px-4 py-3">{new Date(entry.checkedInAt).toLocaleString("id-ID")}</td>
+                      <td className="px-4 py-3 text-center">
+                        <button
+                          type="button"
+                          className="text-red-500 hover:text-red-400 transition text-sm"
+                          onClick={() => deleteCheckinEntry(entry.guestId)}
+                          title="Hapus data check-in ini"
+                        >
+                          Hapus
+                        </button>
+                      </td>
                     </tr>
                   ))
                 )}

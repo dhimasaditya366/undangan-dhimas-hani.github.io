@@ -76,8 +76,8 @@ export const WishesWall = () => {
           ))}
         </div>
 
-        {/* Tombol Clear Data (Untuk Testing) */}
-        <div className="mt-16 text-center">
+        {/* Tombol Clear Data (Untuk Testing) - Hidden */}
+        <div className="mt-16 text-center" style={{ display: 'none' }}>
           <button
             onClick={() => {
               if (confirm("Hapus semua data ucapan dummy?")) {
