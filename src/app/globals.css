@@ -170,3 +170,14 @@ body {
 .animate-fade-text {
   animation: fadeText 2.4s ease-in-out infinite;
 }
+
+@keyframes scanLine {
+  0%   { top: 4px;   opacity: 0; }
+  5%   { opacity: 1; }
+  95%  { opacity: 1; }
+  100% { top: calc(100% - 4px); opacity: 0; }
+}
+
+.animate-scan-line {
+  animation: scanLine 2s linear infinite;
+}
