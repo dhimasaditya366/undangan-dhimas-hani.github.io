@@ -176,6 +176,21 @@ export default function AdminCheckinPage() {
     }
   };
 
+  const resetAllQr = () => {
+    if (window.confirm("Reset semua QR tamu? Tamu harus submit RSVP ulang untuk mendapatkan QR baru.")) {
+      Object.keys(localStorage)
+        .filter((k) => k.startsWith("wedding_qr_"))
+        .forEach((k) => localStorage.removeItem(k));
+      setScanMessage("Semua QR tamu telah direset.");
+    }
+  };
+
+  const resetGuestQr = (guest: GuestRow) => {
+    localStorage.removeItem(`wedding_qr_${guest.guestId}`);
+    localStorage.removeItem(`wedding_qr_${guest.name}`);
+    setScanMessage(`QR untuk ${guest.name} telah direset.`);
+  };
+
   const saveCheckinList = (list: CheckinEntry[]) => {
     localStorage.setItem(STORAGE_KEYS.checkinList, JSON.stringify(list));
     setCheckinList(list);
@@ -541,6 +556,13 @@ export default function AdminCheckinPage() {
                 >
                   Hapus Ucapan & Doa
                 </button>
+                <button
+                  type="button"
+                  className="rounded-xl border border-amber-500/40 px-5 py-3 text-center text-amber-400 transition hover:bg-amber-500/10 sm:col-span-2"
+                  onClick={resetAllQr}
+                >
+                  Reset Semua QR Tamu
+                </button>
               </div>
             </div>
 
@@ -574,7 +596,7 @@ export default function AdminCheckinPage() {
                         <td className="px-4 py-3 align-top">{guest.name}</td>
                         <td className="px-4 py-3 align-top">{guest.phone}</td>
                         <td className="px-4 py-3 align-top text-center">
-                          <div className="flex items-center justify-center gap-2">
+                          <div className="flex items-center justify-center gap-2 flex-wrap">
                             <a
                               href={createWhatsAppLink(guest)}
                               target="_blank"
@@ -591,6 +613,13 @@ export default function AdminCheckinPage() {
                             >
                               Buka Link
                             </a>
+                            <button
+                              type="button"
+                              onClick={() => resetGuestQr(guest)}
+                              className="inline-block rounded-lg bg-amber-500/10 border border-amber-500/40 px-3 py-1 text-xs text-amber-400 hover:bg-amber-500/20 transition"
+                            >
+                              Reset QR
+                            </button>
                           </div>
                         </td>
                       </tr>
