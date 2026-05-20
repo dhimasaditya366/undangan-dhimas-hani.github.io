@@ -28,7 +28,7 @@ export const weddingConfig = {
   openingVideo: "/undangan-dhimas-hani.github.io/videos/opening.mp4",
   heroBg: "/undangan-dhimas-hani.github.io/images/hero-bg.jpeg",
   baroqueBg: "/undangan-dhimas-hani.github.io/images/baroque-bg.jpeg",
-  backgroundMusic: "/undangan-dhimas-hani.github.io/audio/wedding-song.mp3",
+  backgroundMusic: "/undangan-dhimas-hani.github.io/audio/wedding-song.mp3?v=20260520",
 
   groomPhoto: "/undangan-dhimas-hani.github.io/images/hero-bg.jpeg",      // 📝 GANTI jika ingin foto pengantin
   bridePhoto: "/undangan-dhimas-hani.github.io/images/baroque-bg.jpeg",   // 📝 GANTI jika ingin foto pengantin
