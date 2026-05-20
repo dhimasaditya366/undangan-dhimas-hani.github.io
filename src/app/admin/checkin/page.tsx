@@ -61,6 +61,14 @@ export default function AdminCheckinPage() {
     }
   };
 
+  const clearRsvpData = () => {
+    if (window.confirm("Apakah Anda yakin ingin menghapus semua data RSVP, ucapan, dan doa? Tindakan ini tidak dapat dibatalkan.")) {
+      localStorage.removeItem("wedding_rsvp");
+      window.dispatchEvent(new Event("rsvp_updated"));
+      setScanMessage("Semua data RSVP, ucapan, dan doa telah dihapus.");
+    }
+  };
+
   const deleteCheckinEntry = (guestId: string) => {
     const updated = checkinList.filter((entry) => entry.guestId !== guestId);
     saveCheckinList(updated);
@@ -313,6 +321,13 @@ export default function AdminCheckinPage() {
               onClick={clearGuestList}
             >
               Hapus Semua Data Tamu
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-red-500/50 px-5 py-3 text-red-500 transition hover:bg-red-500/10"
+              onClick={clearRsvpData}
+            >
+              Reset Ucapan & Doa
             </button>
           </div>
         </section>
