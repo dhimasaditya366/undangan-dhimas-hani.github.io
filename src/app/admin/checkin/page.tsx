@@ -336,95 +336,126 @@ export default function AdminCheckinPage() {
             </div>
           </div>
 
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
-            <button
-              type="button"
-              className="rounded-full bg-gold-warm px-5 py-3 text-olive-dark transition hover:bg-gold-warm/90"
-              onClick={copyBlastLinks}
-            >
-              Salin Semua Link WA Blast
-            </button>
-            <button
-              type="button"
-              className="rounded-full border border-gold-warm/50 px-5 py-3 text-text-light transition hover:bg-white/5"
-              onClick={handleOpenAllWhatsApp}
-            >
-              Buka Semua Chat WA (opsional)
-            </button>
-            <button
-              type="button"
-              className="rounded-full border border-gold-warm/50 px-5 py-3 text-text-light transition hover:bg-white/5"
-              onClick={handleDownloadBlastCsv}
-            >
-              Download Blast CSV
-            </button>
-            <button
-              type="button"
-              className="rounded-full border border-gold-warm/50 px-5 py-3 text-text-light transition hover:bg-white/5"
-              onClick={handleDownloadGuestCsv}
-            >
-              Download Guest List
-            </button>
-            <button
-              type="button"
-              className="rounded-full border border-red-500/50 px-5 py-3 text-red-500 transition hover:bg-red-500/10"
-              onClick={clearGuestList}
-            >
-              Hapus Semua Data Tamu
-            </button>
-            <button
-              type="button"
-              className="rounded-full border border-blue-500/50 px-5 py-3 text-blue-400 transition hover:bg-blue-500/10"
-              onClick={async () => {
-                const { isRemoteEnabled, saveAllRemote } = await import("@/lib/firebase-sync");
-                if (!isRemoteEnabled()) return setScanMessage("Firebase belum dikonfigurasi. Isi .env.local terlebih dahulu.");
-                setSyncStatus("syncing");
-                try {
-                  await saveAllRemote({ guestList, checkinList, rsvpList: JSON.parse(localStorage.getItem("wedding_rsvp") || "[]") });
-                  setSyncStatus("ok");
-                  setScanMessage("Push ke Firebase berhasil.");
-                } catch {
-                  setSyncStatus("error");
-                  setScanMessage("Push gagal. Cek konfigurasi Firebase.");
-                }
-              }}
-            >
-              Push ke Remote
-            </button>
-            <button
-              type="button"
-              className="rounded-full border border-blue-500/50 px-5 py-3 text-blue-400 transition hover:bg-blue-500/10"
-              onClick={async () => {
-                const { isRemoteEnabled, loadAllRemote } = await import("@/lib/firebase-sync");
-                if (!isRemoteEnabled()) return setScanMessage("Firebase belum dikonfigurasi. Isi .env.local terlebih dahulu.");
-                setSyncStatus("syncing");
-                try {
-                  const data = await loadAllRemote();
-                  if (data) {
-                    if (data.guestList) { localStorage.setItem(STORAGE_KEYS.guestList, JSON.stringify(data.guestList)); setGuestList(data.guestList); }
-                    if (data.checkinList) { localStorage.setItem(STORAGE_KEYS.checkinList, JSON.stringify(data.checkinList)); setCheckinList(data.checkinList); }
-                    if (data.rsvpList) { localStorage.setItem("wedding_rsvp", JSON.stringify(data.rsvpList)); window.dispatchEvent(new Event("rsvp_updated")); }
-                    setSyncStatus("ok");
-                    setScanMessage("Pull dari Firebase berhasil.");
-                  } else {
-                    setSyncStatus("idle");
-                    setScanMessage("Tidak ada data di Firebase.");
-                  }
-                } catch {
-                  setSyncStatus("error");
-                  setScanMessage("Pull gagal. Cek konfigurasi Firebase.");
-                }
-              }}
-            >
-              Pull dari Remote
-            </button>
-            <button
-              type="button"
-              className="rounded-full border border-red-500/50 px-5 py-3 text-red-500 transition hover:bg-red-500/10"
-              onClick={clearRsvpData}
-            >
-              Reset Ucapan & Doa
-            </button>
+          <div className="mt-6 space-y-4">
+
+            {/* Grup: Kirim Undangan */}
+            <div className="rounded-2xl border border-gold-warm/20 bg-black/10 p-4">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-gold-warm/60">Kirim Undangan</p>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <button
+                  type="button"
+                  className="rounded-xl bg-gold-warm px-5 py-3 text-center text-olive-dark font-medium transition hover:bg-gold-warm/90"
+                  onClick={copyBlastLinks}
+                >
+                  Salin Semua Link WA
+                </button>
+                <button
+                  type="button"
+                  className="rounded-xl border border-gold-warm/40 px-5 py-3 text-center text-text-light transition hover:bg-white/5"
+                  onClick={handleOpenAllWhatsApp}
+                >
+                  Buka Semua Chat WA
+                </button>
+              </div>
+            </div>
+
+            {/* Grup: Unduh Data */}
+            <div className="rounded-2xl border border-gold-warm/20 bg-black/10 p-4">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-gold-warm/60">Unduh Data</p>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <button
+                  type="button"
+                  className="rounded-xl border border-gold-warm/40 px-5 py-3 text-center text-text-light transition hover:bg-white/5"
+                  onClick={handleDownloadGuestCsv}
+                >
+                  Unduh Daftar Tamu (.csv)
+                </button>
+                <button
+                  type="button"
+                  className="rounded-xl border border-gold-warm/40 px-5 py-3 text-center text-text-light transition hover:bg-white/5"
+                  onClick={handleDownloadBlastCsv}
+                >
+                  Unduh Link WA Blast (.csv)
+                </button>
+              </div>
+            </div>
+
+            {/* Grup: Sinkronisasi */}
+            <div className="rounded-2xl border border-blue-500/20 bg-black/10 p-4">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-blue-400/60">Sinkronisasi Antar Perangkat</p>
+              <p className="mb-3 text-xs text-text-light/40">Kirim data ke cloud agar bisa diakses di HP/laptop lain</p>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <button
+                  type="button"
+                  className="rounded-xl border border-blue-500/40 px-5 py-3 text-center text-blue-400 transition hover:bg-blue-500/10"
+                  onClick={async () => {
+                    const { isRemoteEnabled, saveAllRemote } = await import("@/lib/firebase-sync");
+                    if (!isRemoteEnabled()) return setScanMessage("Firebase belum dikonfigurasi.");
+                    setSyncStatus("syncing");
+                    try {
+                      await saveAllRemote({ guestList, checkinList, rsvpList: JSON.parse(localStorage.getItem("wedding_rsvp") || "[]") });
+                      setSyncStatus("ok");
+                      setScanMessage("Data berhasil dikirim ke cloud.");
+                    } catch {
+                      setSyncStatus("error");
+                      setScanMessage("Gagal kirim ke cloud. Cek koneksi internet.");
+                    }
+                  }}
+                >
+                  ↑ Kirim ke Cloud
+                </button>
+                <button
+                  type="button"
+                  className="rounded-xl border border-blue-500/40 px-5 py-3 text-center text-blue-400 transition hover:bg-blue-500/10"
+                  onClick={async () => {
+                    const { isRemoteEnabled, loadAllRemote } = await import("@/lib/firebase-sync");
+                    if (!isRemoteEnabled()) return setScanMessage("Firebase belum dikonfigurasi.");
+                    setSyncStatus("syncing");
+                    try {
+                      const data = await loadAllRemote();
+                      if (data) {
+                        if (data.guestList) { localStorage.setItem(STORAGE_KEYS.guestList, JSON.stringify(data.guestList)); setGuestList(data.guestList); }
+                        if (data.checkinList) { localStorage.setItem(STORAGE_KEYS.checkinList, JSON.stringify(data.checkinList)); setCheckinList(data.checkinList); }
+                        if (data.rsvpList) { localStorage.setItem("wedding_rsvp", JSON.stringify(data.rsvpList)); window.dispatchEvent(new Event("rsvp_updated")); }
+                        setSyncStatus("ok");
+                        setScanMessage("Data berhasil diambil dari cloud.");
+                      } else {
+                        setSyncStatus("idle");
+                        setScanMessage("Belum ada data di cloud.");
+                      }
+                    } catch {
+                      setSyncStatus("error");
+                      setScanMessage("Gagal ambil dari cloud. Cek koneksi internet.");
+                    }
+                  }}
+                >
+                  ↓ Ambil dari Cloud
+                </button>
+              </div>
+            </div>
+
+            {/* Grup: Zona Berbahaya */}
+            <div className="rounded-2xl border border-red-500/20 bg-black/10 p-4">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-red-400/60">Hapus Data</p>
+              <p className="mb-3 text-xs text-text-light/40">Tindakan ini tidak dapat dibatalkan</p>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <button
+                  type="button"
+                  className="rounded-xl border border-red-500/40 px-5 py-3 text-center text-red-400 transition hover:bg-red-500/10"
+                  onClick={clearGuestList}
+                >
+                  Hapus Semua Data Tamu
+                </button>
+                <button
+                  type="button"
+                  className="rounded-xl border border-red-500/40 px-5 py-3 text-center text-red-400 transition hover:bg-red-500/10"
+                  onClick={clearRsvpData}
+                >
+                  Hapus Ucapan & Doa
+                </button>
+              </div>
+            </div>
+
           </div>
         </section>
 
