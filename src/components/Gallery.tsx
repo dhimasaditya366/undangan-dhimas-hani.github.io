@@ -13,6 +13,7 @@ export const Gallery = () => {
   const [direction, setDirection] = useState(1); // 1 = next, -1 = prev
   const [isPaused, setIsPaused] = useState(false);
   const thumbRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const filmstripRef = useRef<HTMLDivElement>(null);
 
   const go = useCallback((dir: number) => {
     setDirection(dir);
@@ -31,9 +32,16 @@ export const Gallery = () => {
     return () => clearInterval(t);
   }, [isPaused, go]);
 
-  // Keep the active thumbnail in view as the slideshow advances
+  // Keep the active thumbnail in view as the slideshow advances.
+  // Scrolls only the filmstrip's own scrollLeft -- never the page -- since
+  // scrollIntoView() will drag the whole page down to this section if it's
+  // off-screen (e.g. during autoplay while the user is reading elsewhere).
   useEffect(() => {
-    thumbRefs.current[current]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    const container = filmstripRef.current;
+    const thumb = thumbRefs.current[current];
+    if (!container || !thumb) return;
+    const target = thumb.offsetLeft - (container.clientWidth - thumb.clientWidth) / 2;
+    container.scrollTo({ left: target, behavior: 'smooth' });
   }, [current]);
 
   const variants = {
@@ -169,7 +177,7 @@ export const Gallery = () => {
         </div>
 
         {/* Thumbnail filmstrip */}
-        <div className="flex gap-2 mt-4 overflow-x-auto no-scrollbar px-1" style={{ scrollSnapType: 'x proximity' }}>
+        <div ref={filmstripRef} className="flex gap-2 mt-4 overflow-x-auto no-scrollbar px-1" style={{ scrollSnapType: 'x proximity' }}>
           {photos.map((src, i) => (
             <button
               key={i}
