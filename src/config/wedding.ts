@@ -7,12 +7,12 @@ export const weddingConfig = {
 
   brideName: "Raihannil Jannah",
   brideFullName: "Raihannil Jannah",
-  brideInitial: "R",
+  brideInitial: "H",
   brideParents: "Putri dari Bapak [X] & Ibu [Y]",
 
   // ─── TANGGAL & WAKTU ──────────────────────────────
-  weddingDate: "2026-12-18T09:00:00",
-  weddingDateDisplay: "Jum'at, 18 Desember 2026",
+  weddingDate: "2026-12-20T09:00:00",
+  weddingDateDisplay: "Minggu, 20 Desember 2026",
   akadTime: "09.00 – 11.00 WIB",
   resepsiTime: "11.00 – 14.00 WIB",
 
@@ -28,6 +28,7 @@ export const weddingConfig = {
   openingVideo: "/undangan-dhimas-hani.github.io/videos/opening.mp4",
   heroBg: "/undangan-dhimas-hani.github.io/images/hero-bg.jpeg",
   baroqueBg: "/undangan-dhimas-hani.github.io/images/baroque-bg.jpeg",
+  countdownBg: "/undangan-dhimas-hani.github.io/images/story-bg.jpeg",
   backgroundMusic: "/undangan-dhimas-hani.github.io/audio/wedding-song.mp3?v=20260520",
 
   groomPhoto: "/undangan-dhimas-hani.github.io/images/hero-bg.jpeg",      // 📝 GANTI jika ingin foto pengantin
@@ -43,12 +44,12 @@ export const weddingConfig = {
 
   // ─── TEKS ─────────────────────────────────────────
   closingQuote: "Dan mereka pun hidup bahagia selamanya", // 📝 GANTI
-  dresscodeNote: "Formal / Semi-formal. Mohon hindari warna putih penuh.",
-  dresscodeColors: [
-    { name: "Olive", hex: "#3D3D18" },
-    { name: "Sage", hex: "#DDE8B8" },
-    { name: "Cream", hex: "#F2F5E8" },
-    { name: "Gold", hex: "#C9A96E" },
+
+  // ─── HADIAH PERNIKAHAN ────────────────────────────
+  giftNote: "Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Namun jika ingin memberi tanda kasih, Anda dapat mengirimkannya melalui rekening berikut.",
+  bankAccounts: [
+    { bank: "BCA", accountNumber: "1234567890", accountName: "Dhimas Aditya" },       // 📝 GANTI
+    { bank: "Mandiri", accountNumber: "0987654321", accountName: "Raihannil Jannah" }, // 📝 GANTI
   ],
 
   // ─── STORY OF US ──────────────────────────────────

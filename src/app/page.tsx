@@ -12,7 +12,7 @@ import { StoryOfUs } from "@/components/StoryOfUs";
 import { LocationSection } from "@/components/LocationSection";
 import { RSVPForm } from "@/components/RSVPForm";
 import { WishesWall } from "@/components/WishesWall";
-import { DressCode } from "@/components/DressCode";
+import { BankTransfer } from "@/components/BankTransfer";
 import { Footer } from "@/components/Footer";
 import { MusicPlayer } from "@/components/MusicPlayer";
 import { CustomCursor } from "@/components/CustomCursor";
@@ -40,7 +40,7 @@ export default function Home() {
         <LocationSection />
         <RSVPForm />
         <WishesWall />
-        <DressCode />
+        <BankTransfer />
         <Footer />
       </div>
     </main>

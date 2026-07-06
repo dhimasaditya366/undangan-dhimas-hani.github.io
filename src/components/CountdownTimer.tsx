@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 import { weddingConfig } from "@/config/wedding";
 
 const FlipDigit = ({ digit, label }: { digit: number; label: string }) => {
@@ -96,8 +97,19 @@ export const CountdownTimer = () => {
 
   return (
     <section className="py-24 bg-olive-dark relative overflow-hidden flex justify-center items-center">
+      {/* Photo Background with Green Filter */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src={weddingConfig.countdownBg}
+          alt="Countdown Background"
+          fill
+          className="object-cover opacity-55"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-olive-dark/55 via-olive-dark/35 to-olive-dark/60" />
+      </div>
+
       {/* Background Ornaments */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none">
+      <div className="absolute inset-0 opacity-10 pointer-events-none z-[1]">
         <div className="absolute top-0 left-0 w-32 h-32 border-t border-l rounded-tl-full -translate-x-1/2 -translate-y-1/2" style={{ borderColor: 'rgba(212,168,67,0.3)' }} />
         <div className="absolute bottom-0 right-0 w-32 h-32 border-b border-r rounded-br-full translate-x-1/2 translate-y-1/2" style={{ borderColor: 'rgba(212,168,67,0.3)' }} />
       </div>
