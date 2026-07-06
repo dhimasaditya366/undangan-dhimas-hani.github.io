@@ -56,7 +56,7 @@ export const OpeningVideo = () => {
           style={{ opacity: overlayOpacity }}
           className="absolute inset-0 bg-[rgba(28,52,10,0.48)]"
         />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(16,44,6,0.15)_0%,rgba(16,44,6,0.55)_100%)] pointer-events-none z-[5]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_farthest-side_at_center,rgba(16,44,6,0.15)_0%,rgba(16,44,6,0.55)_100%)] pointer-events-none z-[5]" />
 
         {/* Content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
