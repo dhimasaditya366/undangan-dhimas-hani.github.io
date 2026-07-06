@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { weddingConfig } from "@/config/wedding";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -12,11 +12,17 @@ export const Gallery = () => {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1); // 1 = next, -1 = prev
   const [isPaused, setIsPaused] = useState(false);
+  const thumbRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const go = useCallback((dir: number) => {
     setDirection(dir);
     setCurrent((c) => (c + dir + photos.length) % photos.length);
   }, [photos.length]);
+
+  const jumpTo = (i: number) => {
+    setDirection(i > current ? 1 : -1);
+    setCurrent(i);
+  };
 
   // Auto-advance every 4s
   useEffect(() => {
@@ -24,6 +30,11 @@ export const Gallery = () => {
     const t = setInterval(() => go(1), 4000);
     return () => clearInterval(t);
   }, [isPaused, go]);
+
+  // Keep the active thumbnail in view as the slideshow advances
+  useEffect(() => {
+    thumbRefs.current[current]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }, [current]);
 
   const variants = {
     enter: (d: number) => ({ x: d > 0 ? "100%" : "-100%", opacity: 0 }),
@@ -137,42 +148,34 @@ export const Gallery = () => {
           </div>
 
           {/* Counter + progress */}
-          <div className="flex items-center justify-between mt-3 px-1">
-            <span className="font-body text-xs tracking-[0.2em] uppercase" style={{ color: 'rgba(90,120,32,0.6)' }}>
+          <div className="flex items-center gap-3 mt-3 px-1">
+            <span className="font-body text-xs tracking-[0.2em] uppercase flex-shrink-0 whitespace-nowrap" style={{ color: 'rgba(90,120,32,0.6)' }}>
               {String(current + 1).padStart(2, '0')} / {String(photos.length).padStart(2, '0')}
             </span>
 
-            {/* Progress dots */}
-            <div className="flex gap-1.5 items-center">
-              {photos.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i); }}
-                  className="transition-all duration-400"
-                  style={{
-                    width: i === current ? '20px' : '6px',
-                    height: '6px',
-                    borderRadius: '3px',
-                    backgroundColor: i === current ? '#D4A843' : 'rgba(90,120,32,0.3)',
-                  }}
-                />
-              ))}
+            {/* Progress bar */}
+            <div className="flex-1 h-[2px] rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(90,120,32,0.15)' }}>
+              <div
+                className="h-full transition-all duration-500 ease-out"
+                style={{ width: `${((current + 1) / photos.length) * 100}%`, backgroundColor: '#D4A843' }}
+              />
             </div>
 
             {/* Auto-play status */}
-            <span className="font-body text-xs tracking-[0.2em] uppercase" style={{ color: 'rgba(90,120,32,0.35)' }}>
+            <span className="font-body text-xs tracking-[0.2em] uppercase flex-shrink-0 whitespace-nowrap" style={{ color: 'rgba(90,120,32,0.35)' }}>
               {isPaused ? 'PAUSED' : 'AUTO'}
             </span>
           </div>
         </div>
 
-        {/* Thumbnail strip */}
-        <div className="flex gap-2 mt-4 justify-center flex-wrap">
+        {/* Thumbnail filmstrip */}
+        <div className="flex gap-2 mt-4 overflow-x-auto no-scrollbar px-1" style={{ scrollSnapType: 'x proximity' }}>
           {photos.map((src, i) => (
             <button
               key={i}
-              onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i); }}
-              className="relative overflow-hidden transition-all duration-300"
+              ref={(el) => { thumbRefs.current[i] = el; }}
+              onClick={() => jumpTo(i)}
+              className="relative overflow-hidden transition-all duration-300 flex-shrink-0"
               style={{
                 width: '48px',
                 height: '64px',
@@ -180,6 +183,7 @@ export const Gallery = () => {
                 opacity: i === current ? 1 : 0.55,
                 transform: i === current ? 'scale(1.08)' : 'scale(1)',
                 borderRadius: '1px',
+                scrollSnapAlign: 'center',
               }}
             >
               {/* thumb placeholder */}
