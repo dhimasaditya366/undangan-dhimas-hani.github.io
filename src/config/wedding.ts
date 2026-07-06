@@ -3,12 +3,14 @@ export const weddingConfig = {
   groomName: "Dhimas Aditya",
   groomFullName: "Dhimas Aditya",
   groomInitial: "D",
-  groomParents: "Putra dari Bapak [X] & Ibu [Y]",
+  groomParents: "Putra dari Bapak Budi Santoso & Ibu Yenni Nurhayani",
+  groomInstagram: "https://instagram.com/USERNAME_GANTI", // 📝 GANTI — link Instagram mempelai pria
 
   brideName: "Raihannil Jannah",
   brideFullName: "Raihannil Jannah",
   brideInitial: "H",
-  brideParents: "Putri dari Bapak [X] & Ibu [Y]",
+  brideParents: "Putri dari Bapak Djunaidi & Ibu Asni Yanti",
+  brideInstagram: "https://instagram.com/USERNAME_GANTI", // 📝 GANTI — link Instagram mempelai wanita
 
   // ─── TANGGAL & WAKTU ──────────────────────────────
   weddingDate: "2026-12-20T09:00:00",
@@ -31,7 +33,7 @@ export const weddingConfig = {
   countdownBg: "/undangan-dhimas-hani.github.io/images/BG_Countdown.jpeg",
   backgroundMusic: "/undangan-dhimas-hani.github.io/audio/wedding-song.mp3?v=20260520",
 
-  groomPhoto: "/undangan-dhimas-hani.github.io/images/hero-bg.jpeg",      // 📝 GANTI jika ingin foto pengantin
+  groomPhoto: "/undangan-dhimas-hani.github.io/images/Groom_Photos.jpeg",      // 📝 GANTI jika ingin foto pengantin
   bridePhoto: "/undangan-dhimas-hani.github.io/images/Bride_Photos.jpeg",   // 📝 GANTI jika ingin foto pengantin
   galleryPhotos: [                      // 📝 GANTI — tambah/kurangi sesuai jumlah foto
     "/undangan-dhimas-hani.github.io/images/story-1.jpeg",

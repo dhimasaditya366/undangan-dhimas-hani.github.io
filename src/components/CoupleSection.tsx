@@ -33,13 +33,18 @@ export const CoupleSection = () => {
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex flex-col items-center text-center max-w-xs"
+            className="flex flex-col items-center text-center max-w-sm w-full px-2"
           >
             <PhotoPlaceholder initial={weddingConfig.brideInitial} photo={weddingConfig.bridePhoto} size="lg" className="mb-8" />
             <h3 className="t2 text-text-main mb-2">{weddingConfig.brideFullName}</h3>
-            <p className="t5 text-olive-text mb-4">{weddingConfig.brideParents}</p>
+            <p
+              className="text-olive-text mb-4 whitespace-nowrap"
+              style={{ fontFamily: 'var(--font-body)', fontWeight: 300, letterSpacing: '0.05em', fontSize: 'clamp(0.7rem, 3.3vw, 0.95rem)' }}
+            >
+              {weddingConfig.brideParents}
+            </p>
             <div className="flex gap-4 mt-2">
-              <a href="#" className="w-8 h-8 rounded-full border border-gold-warm/50 flex items-center justify-center text-gold-warm hover:bg-gold-warm hover:text-sage-cream transition-colors">
+              <a href={weddingConfig.brideInstagram} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full border border-gold-warm/50 flex items-center justify-center text-gold-warm hover:bg-gold-warm hover:text-sage-cream transition-colors">
                  <span className="sr-only">Instagram</span>
                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
               </a>
@@ -63,13 +68,18 @@ export const CoupleSection = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex flex-col items-center text-center max-w-xs"
+            className="flex flex-col items-center text-center max-w-sm w-full px-2"
           >
             <PhotoPlaceholder initial={weddingConfig.groomInitial} photo={weddingConfig.groomPhoto} size="lg" className="mb-8" />
             <h3 className="t2 text-text-main mb-2">{weddingConfig.groomFullName}</h3>
-            <p className="t5 text-olive-text mb-4">{weddingConfig.groomParents}</p>
+            <p
+              className="text-olive-text mb-4 whitespace-nowrap"
+              style={{ fontFamily: 'var(--font-body)', fontWeight: 300, letterSpacing: '0.05em', fontSize: 'clamp(0.7rem, 3.3vw, 0.95rem)' }}
+            >
+              {weddingConfig.groomParents}
+            </p>
             <div className="flex gap-4 mt-2">
-              <a href="#" className="w-8 h-8 rounded-full border border-gold-warm/50 flex items-center justify-center text-gold-warm hover:bg-gold-warm hover:text-sage-cream transition-colors">
+              <a href={weddingConfig.groomInstagram} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full border border-gold-warm/50 flex items-center justify-center text-gold-warm hover:bg-gold-warm hover:text-sage-cream transition-colors">
                  <span className="sr-only">Instagram</span>
                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
               </a>
