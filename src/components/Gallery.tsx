@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { weddingConfig } from "@/config/wedding";
@@ -14,6 +14,8 @@ export const Gallery = () => {
   const [isPaused, setIsPaused] = useState(false);
   const thumbRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const filmstripRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { amount: 0.3 });
 
   const go = useCallback((dir: number) => {
     setDirection(dir);
@@ -25,12 +27,15 @@ export const Gallery = () => {
     setCurrent(i);
   };
 
-  // Auto-advance every 4s
+  // Auto-advance every 4s, but only once this section is actually on screen --
+  // otherwise the timer runs from page load and burns through slides while the
+  // guest is still reading earlier sections, so it's already on photo 3+ by
+  // the time they scroll down to look at it.
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || !isInView) return;
     const t = setInterval(() => go(1), 4000);
     return () => clearInterval(t);
-  }, [isPaused, go]);
+  }, [isPaused, isInView, go]);
 
   // Keep the active thumbnail in view as the slideshow advances.
   // Scrolls only the filmstrip's own scrollLeft -- never the page -- since
@@ -52,6 +57,7 @@ export const Gallery = () => {
 
   return (
     <section
+      ref={sectionRef}
       className="py-20 relative overflow-hidden"
       style={{ backgroundColor: '#EEF2DC' }}
     >
