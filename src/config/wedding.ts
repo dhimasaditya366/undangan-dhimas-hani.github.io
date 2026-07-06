@@ -36,12 +36,35 @@ export const weddingConfig = {
   groomPhoto: "/undangan-dhimas-hani.github.io/images/Groom_Photos.jpeg",      // 📝 GANTI jika ingin foto pengantin
   bridePhoto: "/undangan-dhimas-hani.github.io/images/Bride_Photos.jpeg",   // 📝 GANTI jika ingin foto pengantin
   galleryPhotos: [                      // 📝 GANTI — tambah/kurangi sesuai jumlah foto
-    "/undangan-dhimas-hani.github.io/images/story-1.jpeg",
-    "/undangan-dhimas-hani.github.io/images/story-2.jpeg",
-    "/undangan-dhimas-hani.github.io/images/story-3.jpeg",
-    "/undangan-dhimas-hani.github.io/images/hero-bg.jpeg",
-    "/undangan-dhimas-hani.github.io/images/baroque-bg.jpeg",
-    "/undangan-dhimas-hani.github.io/images/story-bg.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/1.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/2.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/3.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/4.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/5.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/6.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/7.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/8.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/9.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/10.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/11.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/12.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/13.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/14.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/15.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/16.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/17.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/18.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/19.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/20.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/21.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/22.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/23.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/24.jpeg",
+    "/undangan-dhimas-hani.github.io/images/galery/ETM_8213.JPG",
+    "/undangan-dhimas-hani.github.io/images/galery/ETM_8281.jpg",
+    "/undangan-dhimas-hani.github.io/images/galery/ETM_8342.jpg",
+    "/undangan-dhimas-hani.github.io/images/galery/ETM_8374.jpg",
+    "/undangan-dhimas-hani.github.io/images/galery/ETM_8462.jpg",
   ],
 
   // ─── TEKS ─────────────────────────────────────────
@@ -50,8 +73,9 @@ export const weddingConfig = {
   // ─── HADIAH PERNIKAHAN ────────────────────────────
   giftNote: "Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Namun jika ingin memberi tanda kasih, Anda dapat mengirimkannya melalui rekening berikut.",
   bankAccounts: [
-    { bank: "BCA", accountNumber: "1234567890", accountName: "Dhimas Aditya" },       // 📝 GANTI
-    { bank: "Mandiri", accountNumber: "0987654321", accountName: "Raihannil Jannah" }, // 📝 GANTI
+    { bank: "BCA", accountNumber: "0613310875", accountName: "Dhimas Aditya" },
+    { bank: "Jago", accountNumber: "101383819292", accountName: "Dhimas Aditya" },
+    { bank: "BCA", accountNumber: "8890576533", accountName: "Raihannil Jannah" },
   ],
 
   // ─── STORY OF US ──────────────────────────────────
