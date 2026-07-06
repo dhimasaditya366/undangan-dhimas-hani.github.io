@@ -42,7 +42,7 @@ export const Footer = () => {
           </p>
 
           <p className="t5 text-gold-warm opacity-35">
-            Made with ♥
+            Made with ♥ by {weddingConfig.groomName}
           </p>
         </motion.div>
       </div>

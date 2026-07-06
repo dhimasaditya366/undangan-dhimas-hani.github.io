@@ -68,7 +68,7 @@ export const weddingConfig = {
   ],
 
   // ─── TEKS ─────────────────────────────────────────
-  closingQuote: "Dan mereka pun hidup bahagia selamanya", // 📝 GANTI
+  closingQuote: "Tidak ada pernikahan yang selalu berjalan mulus. Hal yang paling krusial bukanlah menemukan jalan yang selalu rata, tetapi komitmen untuk terus membangun hubungan yang benar setiap harinya, baik dalam suka maupun duka.", // 📝 GANTI
 
   // ─── HADIAH PERNIKAHAN ────────────────────────────
   giftNote: "Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Namun jika ingin memberi tanda kasih, Anda dapat mengirimkannya melalui rekening berikut.",
