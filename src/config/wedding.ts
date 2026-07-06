@@ -19,12 +19,12 @@ export const weddingConfig = {
   resepsiTime: "11.00 – 14.00 WIB",
 
   // ─── LOKASI ───────────────────────────────────────
-  venueName: "NAMA VENUE",              // 📝 GANTI
-  venueAddress: "Jl. Alamat, Kota",     // 📝 GANTI
-  venueMapUrl: "https://maps.google.com/?q=NAMA+VENUE", // 📝 GANTI
-  venueWazeUrl: "https://waze.com/ul?ll=-6.2088,106.8456", // 📝 GANTI
-  venueLat: -6.2088,                    // 📝 GANTI — untuk iframe maps
-  venueLng: 106.8456,                   // 📝 GANTI
+  venueName: "Nelayan Restaurant",              // 📝 GANTI
+  venueAddress: "Jl. Sei Jang Laut No.2, Kepulauan Riau 29124",     // 📝 GANTI
+  venueMapUrl: "https://maps.app.goo.gl/yXXgchNTJHTPNR3dA",
+  venueWazeUrl: "https://waze.com/ul?ll=0.8985025,104.4704195&navigate=yes",
+  venueLat: 0.8985025,                   // Nelayan Restaurant, Tanjung Pinang
+  venueLng: 104.4704195,
 
   // ─── MEDIA ────────────────────────────────────────
   openingVideo: "/undangan-dhimas-hani.github.io/videos/opening.mp4",
