@@ -35,7 +35,7 @@ export const CoupleSection = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex flex-col items-center text-center max-w-xs"
           >
-            <PhotoPlaceholder initial={weddingConfig.brideInitial} size="lg" className="mb-8" />
+            <PhotoPlaceholder initial={weddingConfig.brideInitial} photo={weddingConfig.bridePhoto} size="lg" className="mb-8" />
             <h3 className="t2 text-text-main mb-2">{weddingConfig.brideFullName}</h3>
             <p className="t5 text-olive-text mb-4">{weddingConfig.brideParents}</p>
             <div className="flex gap-4 mt-2">
@@ -65,7 +65,7 @@ export const CoupleSection = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex flex-col items-center text-center max-w-xs"
           >
-            <PhotoPlaceholder initial={weddingConfig.groomInitial} size="lg" className="mb-8" />
+            <PhotoPlaceholder initial={weddingConfig.groomInitial} photo={weddingConfig.groomPhoto} size="lg" className="mb-8" />
             <h3 className="t2 text-text-main mb-2">{weddingConfig.groomFullName}</h3>
             <p className="t5 text-olive-text mb-4">{weddingConfig.groomParents}</p>
             <div className="flex gap-4 mt-2">

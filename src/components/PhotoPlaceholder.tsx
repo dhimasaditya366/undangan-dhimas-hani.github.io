@@ -1,15 +1,18 @@
 import React from "react";
+import Image from "next/image";
 
 type PhotoPlaceholderProps = {
   initial?: string;
+  photo?: string;
   size?: "sm" | "md" | "lg";
   className?: string;
 };
 
-export const PhotoPlaceholder: React.FC<PhotoPlaceholderProps> = ({ 
-  initial = "X", 
+export const PhotoPlaceholder: React.FC<PhotoPlaceholderProps> = ({
+  initial = "X",
+  photo,
   size = "md",
-  className = "" 
+  className = ""
 }) => {
   const sizeClasses = {
     sm: "w-16 h-16 text-xl",
@@ -17,10 +20,21 @@ export const PhotoPlaceholder: React.FC<PhotoPlaceholderProps> = ({
     lg: "w-64 h-64 text-5xl",
   };
 
+  if (photo) {
+    return (
+      <div
+        className={`relative rounded-full overflow-hidden shadow-lg ${sizeClasses[size]} ${className}`}
+        style={{ borderColor: 'rgba(201, 169, 110, 0.4)', borderWidth: '2px' }}
+      >
+        <Image src={photo} alt={initial} fill className="object-cover" />
+      </div>
+    );
+  }
+
   return (
-    <div 
+    <div
       className={`rounded-full flex items-center justify-center shadow-lg font-display italic ${sizeClasses[size]} ${className}`}
-      style={{ 
+      style={{
         backgroundImage: 'linear-gradient(to bottom right, #6B6B2A, #7A8A3A)',
         color: '#D4A843',
         borderColor: 'rgba(201, 169, 110, 0.4)',

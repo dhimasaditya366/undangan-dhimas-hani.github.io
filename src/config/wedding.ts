@@ -28,11 +28,11 @@ export const weddingConfig = {
   openingVideo: "/undangan-dhimas-hani.github.io/videos/opening.mp4",
   heroBg: "/undangan-dhimas-hani.github.io/images/hero-bg.jpeg",
   baroqueBg: "/undangan-dhimas-hani.github.io/images/baroque-bg.jpeg",
-  countdownBg: "/undangan-dhimas-hani.github.io/images/story-bg.jpeg",
+  countdownBg: "/undangan-dhimas-hani.github.io/images/BG_Countdown.jpeg",
   backgroundMusic: "/undangan-dhimas-hani.github.io/audio/wedding-song.mp3?v=20260520",
 
   groomPhoto: "/undangan-dhimas-hani.github.io/images/hero-bg.jpeg",      // 📝 GANTI jika ingin foto pengantin
-  bridePhoto: "/undangan-dhimas-hani.github.io/images/baroque-bg.jpeg",   // 📝 GANTI jika ingin foto pengantin
+  bridePhoto: "/undangan-dhimas-hani.github.io/images/Bride_Photos.jpeg",   // 📝 GANTI jika ingin foto pengantin
   galleryPhotos: [                      // 📝 GANTI — tambah/kurangi sesuai jumlah foto
     "/undangan-dhimas-hani.github.io/images/story-1.jpeg",
     "/undangan-dhimas-hani.github.io/images/story-2.jpeg",
