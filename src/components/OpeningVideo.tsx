@@ -13,7 +13,7 @@ export const OpeningVideo = () => {
   });
 
   const scale = useTransform(scrollYProgress, [0, 1], [1.05, 1.0]);
-  const overlayOpacity = useTransform(scrollYProgress, [0, 1], [1, 0.85]);
+  const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0.85, 0.7]);
 
   const handleOpen = () => {
     // Trigger audio
@@ -54,9 +54,9 @@ export const OpeningVideo = () => {
         {/* Overlay */}
         <motion.div
           style={{ opacity: overlayOpacity }}
-          className="absolute inset-0 bg-[rgba(28,52,10,0.62)]"
+          className="absolute inset-0 bg-[rgba(28,52,10,0.48)]"
         />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,44,6,0.35)_0%,rgba(16,44,6,0.8)_100%)] pointer-events-none z-[5]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(16,44,6,0.15)_0%,rgba(16,44,6,0.55)_100%)] pointer-events-none z-[5]" />
 
         {/* Content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10">

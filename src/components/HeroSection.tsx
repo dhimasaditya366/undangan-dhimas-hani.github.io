@@ -37,10 +37,10 @@ export const HeroSection = () => {
             src={weddingConfig.heroBg}
             alt="Hero Background"
             fill
-            className="object-cover opacity-45"
+            className="object-cover opacity-55"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-olive-dark/60 via-olive-dark/35 to-olive-dark/70 z-0"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-olive-dark/45 via-olive-dark/20 to-olive-dark/55 z-0"></div>
         </motion.div>
 
 
