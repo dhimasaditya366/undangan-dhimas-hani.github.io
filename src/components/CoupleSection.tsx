@@ -35,7 +35,7 @@ export const CoupleSection = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex flex-col items-center text-center max-w-sm w-full px-2"
           >
-            <PhotoPlaceholder initial={weddingConfig.brideInitial} photo={weddingConfig.bridePhoto} size="lg" className="mb-8" />
+            <PhotoPlaceholder initial={weddingConfig.brideInitial} photo={weddingConfig.bridePhoto} size="lg" className="mb-8" zoom={1.35} />
             <h3 className="t2 text-text-main mb-2">{weddingConfig.brideFullName}</h3>
             <p
               className="text-olive-text mb-4 whitespace-nowrap"
@@ -70,7 +70,7 @@ export const CoupleSection = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex flex-col items-center text-center max-w-sm w-full px-2"
           >
-            <PhotoPlaceholder initial={weddingConfig.groomInitial} photo={weddingConfig.groomPhoto} size="lg" className="mb-8" />
+            <PhotoPlaceholder initial={weddingConfig.groomInitial} photo={weddingConfig.groomPhoto} size="lg" className="mb-8" objectPosition="30% 40%" />
             <h3 className="t2 text-text-main mb-2">{weddingConfig.groomFullName}</h3>
             <p
               className="text-olive-text mb-4 whitespace-nowrap"

@@ -6,13 +6,17 @@ type PhotoPlaceholderProps = {
   photo?: string;
   size?: "sm" | "md" | "lg";
   className?: string;
+  objectPosition?: string;
+  zoom?: number;
 };
 
 export const PhotoPlaceholder: React.FC<PhotoPlaceholderProps> = ({
   initial = "X",
   photo,
   size = "md",
-  className = ""
+  className = "",
+  objectPosition = "50% 50%",
+  zoom = 1,
 }) => {
   const sizeClasses = {
     sm: "w-16 h-16 text-xl",
@@ -26,7 +30,13 @@ export const PhotoPlaceholder: React.FC<PhotoPlaceholderProps> = ({
         className={`relative rounded-full overflow-hidden shadow-lg ${sizeClasses[size]} ${className}`}
         style={{ borderColor: 'rgba(201, 169, 110, 0.4)', borderWidth: '2px' }}
       >
-        <Image src={photo} alt={initial} fill className="object-cover" />
+        <Image
+          src={photo}
+          alt={initial}
+          fill
+          className="object-cover"
+          style={{ objectPosition, transform: `scale(${zoom})` }}
+        />
       </div>
     );
   }

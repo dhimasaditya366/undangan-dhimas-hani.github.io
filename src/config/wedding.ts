@@ -4,13 +4,13 @@ export const weddingConfig = {
   groomFullName: "Dhimas Aditya",
   groomInitial: "D",
   groomParents: "Putra dari Bapak Budi Santoso & Ibu Yenni Nurhayani",
-  groomInstagram: "https://instagram.com/USERNAME_GANTI", // 📝 GANTI — link Instagram mempelai pria
+  groomInstagram: "https://instagram.com/dhimasaditya366", // 📝 GANTI — link Instagram mempelai pria
 
   brideName: "Raihannil Jannah",
   brideFullName: "Raihannil Jannah",
   brideInitial: "H",
   brideParents: "Putri dari Bapak Djunaidi & Ibu Asni Yanti",
-  brideInstagram: "https://instagram.com/USERNAME_GANTI", // 📝 GANTI — link Instagram mempelai wanita
+  brideInstagram: "https://instagram.com/hanihanrj", // 📝 GANTI — link Instagram mempelai wanita
 
   // ─── TANGGAL & WAKTU ──────────────────────────────
   weddingDate: "2026-12-20T09:00:00",
