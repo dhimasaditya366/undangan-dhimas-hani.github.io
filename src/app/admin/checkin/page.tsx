@@ -11,7 +11,8 @@ import {
   normalizePhoneForWhatsapp,
   decodeQrPayload,
   exportCsv,
-  parseGuestCsv,
+  parseGuestFile,
+  downloadGuestTemplate,
   CheckinEntry,
 } from "@/lib/wedding-utils";
 import { weddingConfig } from "@/config/wedding";
@@ -200,14 +201,17 @@ export default function AdminCheckinPage() {
   const handleCsvUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    const text = await file.text();
-    const parsed = parseGuestCsv(text).map((guest) => ({
-      guestId: guest.guestId || createGuestId(),
-      name: guest.name,
-      phone: guest.phone,
-    }));
-    saveGuestList(parsed);
-    setScanMessage(`Daftar tamu berhasil diimpor (${parsed.length} tamu).`);
+    try {
+      const parsed = (await parseGuestFile(file)).map((guest) => ({
+        guestId: guest.guestId || createGuestId(),
+        name: guest.name,
+        phone: guest.phone,
+      }));
+      saveGuestList(parsed);
+      setScanMessage(`Daftar tamu berhasil diimpor (${parsed.length} tamu).`);
+    } catch {
+      setScanMessage("Gagal membaca file. Pastikan formatnya CSV atau Excel (.xlsx) yang valid.");
+    }
     event.target.value = "";
   };
 
@@ -367,17 +371,24 @@ export default function AdminCheckinPage() {
           <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
             <div>
               <label className="block text-text-light/70 mb-2">
-                CSV Tamu (header: guestId, name, phone)
+                Import Data Tamu (kolom: name, phone)
               </label>
               <input
                 type="file"
-                accept=".csv,text/csv"
+                accept=".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
                 onChange={handleCsvUpload}
                 className="block w-full rounded-lg border border-gold-warm/30 bg-olive-dark/90 px-3 py-2 text-text-light"
               />
               <p className="mt-2 text-xs text-text-light/60">
-                Upload CSV baru akan menimpa (replace) data tamu yang sudah ada sebelumnya.
+                Upload file baru akan menimpa (replace) data tamu yang sudah ada sebelumnya. Mendukung format .csv dan .xlsx.
               </p>
+              <button
+                type="button"
+                onClick={downloadGuestTemplate}
+                className="mt-3 inline-flex items-center gap-2 rounded-lg border border-gold-warm/40 px-4 py-2 text-sm text-gold-warm transition hover:bg-gold-warm/10"
+              >
+                ⬇ Unduh Template Excel Data Tamu
+              </button>
             </div>
 
             <div className="rounded-2xl border border-gold-warm/20 bg-black/15 p-4">

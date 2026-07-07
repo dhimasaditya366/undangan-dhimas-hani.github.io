@@ -1,3 +1,5 @@
+import * as XLSX from "xlsx-js-style";
+
 export type GuestRow = {
   guestId: string;
   name: string;
@@ -99,6 +101,12 @@ export const decodeQrPayload = (value: string) => {
   return null;
 };
 
+const mapRowToGuest = (row: Record<string, string>): GuestRow => ({
+  guestId: row.guestid || row.id || createGuestId(),
+  name: row.name || row.nama || "Tamu Undangan",
+  phone: row.phone || row.nomor || row.hp || "",
+});
+
 export const parseGuestCsv = (csv: string) => {
   const lines = csv
     .trim()
@@ -118,12 +126,101 @@ export const parseGuestCsv = (csv: string) => {
       row[header] = values[index] || "";
     });
 
-    return {
-      guestId: row.guestid || row.guestId || row.id || createGuestId(),
-      name: row.name || "Tamu Undangan",
-      phone: row.phone || row.nomor || row.hp || "",
-    } as GuestRow;
+    return mapRowToGuest(row);
   });
+};
+
+export const parseGuestWorkbook = (buffer: ArrayBuffer): GuestRow[] => {
+  const workbook = XLSX.read(buffer, { type: "array" });
+  const sheet = workbook.Sheets[workbook.SheetNames[0]];
+  if (!sheet) return [];
+
+  const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: "" });
+  return rows
+    .map(raw => {
+      const row: Record<string, string> = {};
+      Object.entries(raw).forEach(([key, value]) => {
+        row[key.trim().toLowerCase()] = String(value ?? "").trim();
+      });
+      return mapRowToGuest(row);
+    })
+    .filter(guest => guest.name !== "Tamu Undangan" || guest.phone);
+};
+
+export const parseGuestFile = async (file: File): Promise<GuestRow[]> => {
+  const isExcel = /\.xlsx?$/i.test(file.name);
+  if (isExcel) {
+    const buffer = await file.arrayBuffer();
+    return parseGuestWorkbook(buffer);
+  }
+  const text = await file.text();
+  return parseGuestCsv(text);
+};
+
+const HEADER_STYLE = {
+  fill: { fgColor: { rgb: "D4A843" } },
+  font: { bold: true, color: { rgb: "2A2A0E" }, sz: 12 },
+  alignment: { horizontal: "center" as const, vertical: "center" as const },
+  border: {
+    top: { style: "thin" as const, color: { rgb: "8A6D1A" } },
+    bottom: { style: "thin" as const, color: { rgb: "8A6D1A" } },
+    left: { style: "thin" as const, color: { rgb: "8A6D1A" } },
+    right: { style: "thin" as const, color: { rgb: "8A6D1A" } },
+  },
+};
+
+const CELL_STYLE = {
+  border: {
+    top: { style: "thin" as const, color: { rgb: "DDDDDD" } },
+    bottom: { style: "thin" as const, color: { rgb: "DDDDDD" } },
+    left: { style: "thin" as const, color: { rgb: "DDDDDD" } },
+    right: { style: "thin" as const, color: { rgb: "DDDDDD" } },
+  },
+  alignment: { vertical: "center" as const },
+};
+
+export const downloadGuestTemplate = () => {
+  const headers = ["name", "phone"];
+  const example = [
+    ["Budi Santoso", "081234567890"],
+    ["Siti Aminah", "082198765432"],
+  ];
+
+  const sheetData = [headers, ...example];
+  const sheet = XLSX.utils.aoa_to_sheet(sheetData);
+
+  const headerCells = ["A1", "B1"];
+  headerCells.forEach(cell => {
+    if (sheet[cell]) sheet[cell].s = HEADER_STYLE;
+  });
+  for (let r = 1; r <= example.length; r++) {
+    ["A", "B"].forEach(col => {
+      const cell = `${col}${r + 1}`;
+      if (sheet[cell]) sheet[cell].s = CELL_STYLE;
+    });
+  }
+
+  sheet["!cols"] = [{ wch: 28 }, { wch: 22 }];
+  sheet["!rows"] = [{ hpx: 26 }];
+
+  const notesData = [
+    ["Panduan Pengisian Data Tamu"],
+    [""],
+    ["1. Jangan ubah nama kolom di sheet 'Data Tamu' (name, phone)."],
+    ["2. Kolom 'name' diisi nama lengkap tamu."],
+    ["3. Kolom 'phone' diisi nomor WhatsApp aktif, contoh: 081234567890."],
+    ["4. Hapus 2 baris contoh sebelum mengisi data tamu asli, atau timpa langsung."],
+    ["5. Simpan file ini lalu upload melalui halaman Admin > Import CSV/Excel Tamu."],
+  ];
+  const notesSheet = XLSX.utils.aoa_to_sheet(notesData);
+  notesSheet["A1"].s = { font: { bold: true, sz: 13, color: { rgb: "2A2A0E" } } };
+  notesSheet["!cols"] = [{ wch: 70 }];
+
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, sheet, "Data Tamu");
+  XLSX.utils.book_append_sheet(workbook, notesSheet, "Panduan");
+
+  XLSX.writeFile(workbook, "template_data_tamu.xlsx");
 };
 
 export const exportCsv = (items: Record<string, unknown>[], headers: string[]) => {
