@@ -8,7 +8,7 @@ export type QrPayload = {
   guestId: string;
   guestName: string;
   phone: string;
-  attendance: "Hadir" | "Tidak Hadir" | "Masih Ragu";
+  attendance: "Hadir" | "Tidak Hadir";
   guests: number;
   timestamp: number;
 };
@@ -70,7 +70,7 @@ export const createWhatsAppLink = (guest: GuestRow) => {
 
 export const createQrPayload = (
   guest: Pick<GuestRow, "guestId" | "name" | "phone">
-, attendance: "Hadir" | "Tidak Hadir" | "Masih Ragu", guests: number) => {
+, attendance: "Hadir" | "Tidak Hadir", guests: number) => {
   const payload: QrPayload = {
     guestId: guest.guestId,
     guestName: guest.name,

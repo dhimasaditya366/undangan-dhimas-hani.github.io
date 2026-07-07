@@ -11,7 +11,7 @@ import { createQrPayload } from "@/lib/wedding-utils";
 type RsvpData = {
   name: string;
   phone: string;
-  attendance: "Hadir" | "Tidak Hadir" | "Masih Ragu";
+  attendance: "Hadir" | "Tidak Hadir";
   guests: number;
   message: string;
   date: string;
@@ -29,7 +29,7 @@ export const RSVPForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
-    attendance: "Hadir" as "Hadir" | "Tidak Hadir" | "Masih Ragu",
+    attendance: "Hadir" as "Hadir" | "Tidak Hadir",
     guests: 1,
     message: "",
   });
@@ -189,7 +189,7 @@ export const RSVPForm = () => {
                   <motion.div>
                     <label className="t3 block text-gold-warm mb-3">Kehadiran</label>
                     <div className="flex flex-col sm:flex-row gap-3">
-                      {(["Hadir", "Tidak Hadir", "Masih Ragu"] as const).map(option => (
+                      {(["Hadir", "Tidak Hadir"] as const).map(option => (
                         <button
                           key={option}
                           type="button"

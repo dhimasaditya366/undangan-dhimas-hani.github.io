@@ -6,8 +6,8 @@ export const weddingConfig = {
   groomParents: "Putra dari Bapak Budi Santoso & Ibu Yenni Nurhayani",
   groomInstagram: "https://instagram.com/dhimasaditya366", // 📝 GANTI — link Instagram mempelai pria
 
-  brideName: "Raihannil Jannah",
-  brideFullName: "Raihannil Jannah",
+  brideName: "Raihhanil Jannah",
+  brideFullName: "Raihhanil Jannah",
   brideInitial: "H",
   brideParents: "Putri dari Bapak Djunaidi & Ibu Asni Yanti",
   brideInstagram: "https://instagram.com/hanihanrj", // 📝 GANTI — link Instagram mempelai wanita
@@ -74,8 +74,7 @@ export const weddingConfig = {
   giftNote: "Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Namun jika ingin memberi tanda kasih, Anda dapat mengirimkannya melalui rekening berikut.",
   bankAccounts: [
     { bank: "BCA", accountNumber: "0613310875", accountName: "Dhimas Aditya" },
-    { bank: "Jago", accountNumber: "101383819292", accountName: "Dhimas Aditya" },
-    { bank: "BCA", accountNumber: "8890576533", accountName: "Raihannil Jannah" },
+    { bank: "BCA", accountNumber: "8890576533", accountName: "Raihhanil Jannah" },
   ],
 
   // ─── STORY OF US ──────────────────────────────────
