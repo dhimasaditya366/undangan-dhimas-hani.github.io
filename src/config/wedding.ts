@@ -16,7 +16,7 @@ export const weddingConfig = {
   weddingDate: "2026-12-20T09:00:00",
   weddingDateDisplay: "Minggu, 20 Desember 2026",
   akadTime: "09.00 – 11.00 WIB",
-  resepsiTime: "11.00 – 14.00 WIB",
+  resepsiTime: "11.00 – 16.00 WIB",
 
   // ─── LOKASI ───────────────────────────────────────
   venueName: "Nelayan Restaurant",              // 📝 GANTI
