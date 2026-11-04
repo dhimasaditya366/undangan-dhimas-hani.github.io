@@ -1,13 +1,13 @@
 export const weddingConfig = {
   // ─── NAMA MEMPELAI ───────────────────────────────
   groomName: "Dhimas Aditya",
-  groomFullName: "Dhimas Aditya",
+  groomFullName: "Dhimas Aditya, S.Tr.Kom.",
   groomInitial: "D",
   groomParents: "Putra dari Bapak Budi Santoso & Ibu Yenni Nurhayani",
   groomInstagram: "https://instagram.com/dhimasaditya366", // 📝 GANTI — link Instagram mempelai pria
 
   brideName: "Raihhanil Jannah",
-  brideFullName: "Raihhanil Jannah",
+  brideFullName: "Raihhanil Jannah, S.Pd., M.Pd.",
   brideInitial: "H",
   brideParents: "Putri dari Bapak Djunaidi & Ibu Asni Yanti",
   brideInstagram: "https://instagram.com/hanihanrj", // 📝 GANTI — link Instagram mempelai wanita

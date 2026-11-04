@@ -19,7 +19,7 @@ const jost = Jost({
 
 export const metadata: Metadata = {
   title: `The Wedding of ${weddingConfig.groomName} & ${weddingConfig.brideName}`,
-  description: `You are invited to the wedding of ${weddingConfig.groomFullName} and ${weddingConfig.brideFullName}.`,
+  description: `You are invited to the wedding of ${weddingConfig.groomName} and ${weddingConfig.brideName}.`,
 };
 
 export default function RootLayout({
