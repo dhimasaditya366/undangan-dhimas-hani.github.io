@@ -5,13 +5,12 @@ import { useRef } from "react";
 import Image from "next/image";
 import { weddingConfig } from "@/config/wedding";
 import { GoldDivider } from "./GoldDivider";
+import { getGuestFromUrl } from "@/lib/wedding-utils";
 
 export const HeroSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const guestName = typeof window !== "undefined"
-    ? new URLSearchParams(window.location.search).get("guestName")
-    : null;
+  const guestName = getGuestFromUrl().guestName ?? null;
   const isInView = useInView(textRef, { once: false, amount: 0.3 });
 
   const { scrollYProgress } = useScroll({

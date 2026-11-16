@@ -6,7 +6,7 @@ import { Loader2, CheckCircle } from "lucide-react";
 import { BaroqueOrnament } from "./BaroqueOrnament";
 import { GoldDivider } from "./GoldDivider";
 import { QRCodeFromString } from "./QRCodeFromString";
-import { createQrPayload } from "@/lib/wedding-utils";
+import { createQrPayload, getGuestFromUrl } from "@/lib/wedding-utils";
 
 type RsvpData = {
   name: string;
@@ -21,10 +21,7 @@ export const RSVPForm = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   
   const isInView = useInView(containerRef, { once: true, amount: 0.1 });
-  const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
-  const guestId = searchParams?.get("guestId") ?? undefined;
-  const guestName = searchParams?.get("guestName") ?? undefined;
-  const guestPhone = searchParams?.get("phone") ?? undefined;
+  const { guestId, guestName, phone: guestPhone } = getGuestFromUrl();
 
   const [formData, setFormData] = useState({
     name: "",

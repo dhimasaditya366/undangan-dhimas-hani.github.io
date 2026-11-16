@@ -55,12 +55,26 @@ const getAppBasePath = () => {
 
 export const createGuestLink = (guest: GuestRow) => {
   const base = typeof window !== "undefined" ? `${window.location.origin}${getAppBasePath()}` : "";
+  // Format pendek: /?to=Nama+Tamu&id=1a2b3c4d
   const params = new URLSearchParams({
-    guestId: guest.guestId,
-    guestName: guest.name,
-    phone: guest.phone,
+    to: guest.name,
+    id: createShortGuestId(guest.guestId),
   });
   return `${base}/?${params.toString()}`;
+};
+
+/** 8 karakter pertama guestId (tanpa tanda "-") — cukup unik untuk ratusan tamu. */
+export const createShortGuestId = (guestId: string) => guestId.replace(/-/g, "").slice(0, 8);
+
+/** Baca data tamu dari URL. Mendukung format baru (to, id) dan lama (guestName, guestId, phone). */
+export const getGuestFromUrl = () => {
+  if (typeof window === "undefined") return { guestId: undefined, guestName: undefined, phone: undefined };
+  const params = new URLSearchParams(window.location.search);
+  return {
+    guestId: params.get("id") ?? params.get("guestId") ?? undefined,
+    guestName: params.get("to") ?? params.get("guestName") ?? undefined,
+    phone: params.get("phone") ?? undefined,
+  };
 };
 
 /**
