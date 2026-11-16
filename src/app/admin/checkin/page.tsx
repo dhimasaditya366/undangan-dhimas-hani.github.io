@@ -14,8 +14,9 @@ import {
   parseGuestFile,
   downloadGuestTemplate,
   CheckinEntry,
+  WHATSAPP_INVITE_TEMPLATE,
+  fillWhatsAppTemplate,
 } from "@/lib/wedding-utils";
-import { weddingConfig } from "@/config/wedding";
 
 const isBarcodeDetectorSupported = typeof window !== "undefined" && "BarcodeDetector" in window;
 
@@ -54,7 +55,7 @@ export default function AdminCheckinPage() {
   const streamRef = useRef<MediaStream | null>(null);
   const detectorRef = useRef<any>(null);
 
-  const DEFAULT_TEMPLATE = `Halo {nama},\n\nKamu diundang ke pernikahan ${weddingConfig.brideName} & ${weddingConfig.groomName} 🎊\n\nBuka undangan personalmu di sini:\n{link}\n\nMohon konfirmasi kehadiranmu melalui link tersebut ya.\nSampai jumpa di hari bahagia kami! 😊`;
+  const DEFAULT_TEMPLATE = WHATSAPP_INVITE_TEMPLATE;
 
   const sendViaFonnte = async () => {
     if (!fonnteToken.trim()) return setScanMessage("Masukkan token Fonnte terlebih dahulu.");
@@ -66,10 +67,7 @@ export default function AdminCheckinPage() {
     for (let i = 0; i < guestList.length; i++) {
       const guest = guestList[i];
       const link = createGuestLink(guest);
-      const message = template
-        .replace(/\{nama\}/gi, guest.name)
-        .replace(/\{link\}/gi, link)
-        .replace(/\{phone\}/gi, guest.phone);
+      const message = fillWhatsAppTemplate(template, guest, link);
       try {
         const res = await fetch("https://api.fonnte.com/send", {
           method: "POST",

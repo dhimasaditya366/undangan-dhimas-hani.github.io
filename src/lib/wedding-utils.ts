@@ -1,4 +1,5 @@
 import * as XLSX from "xlsx-js-style";
+import { weddingConfig } from "@/config/wedding";
 
 export type GuestRow = {
   guestId: string;
@@ -62,10 +63,54 @@ export const createGuestLink = (guest: GuestRow) => {
   return `${base}/?${params.toString()}`;
 };
 
+/**
+ * Template pesan undangan WhatsApp (dipakai tombol "Kirim WA" & blast Fonnte).
+ * Placeholder: {nama}, {link}, {phone}. Format WA: *tebal*, _miring_.
+ */
+export const WHATSAPP_INVITE_TEMPLATE = [
+  "Assalamu'alaikum Warahmatullahi Wabarakatuh",
+  "",
+  "Kepada Yth.",
+  "Bapak/Ibu/Saudara/i",
+  "*{nama}*",
+  "",
+  "Dengan memohon rahmat dan ridho Allah SWT, tanpa mengurangi rasa hormat, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami:",
+  "",
+  `💍 *${weddingConfig.groomFullName}*`,
+  "&",
+  `💍 *${weddingConfig.brideFullName}*`,
+  "",
+  `🗓️ ${weddingConfig.weddingDateDisplay}`,
+  `🕘 Akad Nikah: ${weddingConfig.akadTime}`,
+  `🕚 Resepsi: ${weddingConfig.resepsiTime}`,
+  `📍 ${weddingConfig.venueName}`,
+  `${weddingConfig.venueAddress}`,
+  "",
+  "Info lengkap acara, lokasi, dan konfirmasi kehadiran (RSVP) dapat dilihat melalui undangan digital berikut:",
+  "",
+  "👉 {link}",
+  "",
+  "_Mohon isi RSVP melalui link di atas. QR Code yang Anda dapatkan setelah RSVP akan digunakan untuk check-in di lokasi acara._",
+  "",
+  "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.",
+  "",
+  "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
+  "",
+  "Kami yang berbahagia,",
+  `*${weddingConfig.groomName} & ${weddingConfig.brideName}*`,
+  "beserta keluarga",
+].join("\n");
+
+export const fillWhatsAppTemplate = (template: string, guest: GuestRow, link: string) =>
+  template
+    .replace(/\{nama\}/gi, guest.name)
+    .replace(/\{link\}/gi, link)
+    .replace(/\{phone\}/gi, guest.phone);
+
 export const createWhatsAppLink = (guest: GuestRow) => {
   const phone = normalizePhoneForWhatsapp(guest.phone);
   const inviteUrl = createGuestLink(guest);
-  const text = `Halo ${guest.name}, kamu diundang ke pernikahan kami! Silakan buka undangan ini: ${inviteUrl}`;
+  const text = fillWhatsAppTemplate(WHATSAPP_INVITE_TEMPLATE, guest, inviteUrl);
   const encoded = encodeQuery(text);
   return `https://api.whatsapp.com/send?phone=${phone}&text=${encoded}`;
 };
