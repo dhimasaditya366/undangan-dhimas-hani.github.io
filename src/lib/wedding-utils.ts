@@ -76,9 +76,9 @@ export const WHATSAPP_INVITE_TEMPLATE = [
   "",
   "Dengan memohon rahmat dan ridho Allah SWT, tanpa mengurangi rasa hormat, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami:",
   "",
-  `💍 *${weddingConfig.groomFullName}*`,
-  "&",
   `💍 *${weddingConfig.brideFullName}*`,
+  "&",
+  `💍 *${weddingConfig.groomFullName}*`,
   "",
   `🗓️ ${weddingConfig.weddingDateDisplay}`,
   `🕘 Akad Nikah: ${weddingConfig.akadTime}`,
@@ -97,7 +97,7 @@ export const WHATSAPP_INVITE_TEMPLATE = [
   "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
   "",
   "Kami yang berbahagia,",
-  `*${weddingConfig.groomName} & ${weddingConfig.brideName}*`,
+  `*${weddingConfig.brideName} & ${weddingConfig.groomName}*`,
   "beserta keluarga",
 ].join("\n");
 
